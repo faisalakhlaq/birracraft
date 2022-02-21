@@ -14,3 +14,5 @@ services:
       - ./src:/usr/src/birracraft
     ports:
       - 8000:8000
+    networks:
+      birracraft-net:

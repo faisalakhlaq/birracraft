@@ -23,3 +23,6 @@ Django project started from scratch without installed dependecies in host, only 
         `# django-admin startproject "project-name"`  
         `# python manage.py startapp "app-name"`  
 7. Now the basic structure its done.
+
+#### Extra-Step
+8. Configure `settings.py` to target the db service.

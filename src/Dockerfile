@@ -16,7 +16,7 @@ RUN apk update \
     && apk add libxml2-dev libxslt-dev libffi-dev gcc musl-dev \
     && apk add libgcc openssl-dev curl jpeg-dev zlib-dev freetype-dev \
     && apk add lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev \
-    && apk add python3-dev mariadb-dev
+    && apk add python3-dev
 
 RUN pip3 install -U pip && \
     pip3 install --no-cache-dir -r requirements.txt
