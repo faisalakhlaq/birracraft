@@ -26,3 +26,8 @@ Django project started from scratch without installed dependecies in host, only 
 
 #### Extra-Step
 8. Configure `settings.py` to target the db service.
+    - Use the .env.template as guidance to set the enviroment variables.
+
+#### Last Update
+`NginX` & `Gunicorn` implemented in docker network, successfully connected with birracraft container.
+After finish with this base structure, the applications development begins.
