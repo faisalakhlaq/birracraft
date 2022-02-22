@@ -20,3 +20,11 @@ RUN apk update \
 
 RUN pip3 install -U pip && \
     pip3 install --no-cache-dir -r requirements.txt
+
+# =============
+# BASE IMAGE
+# =============
+
+FROM builder as base
+
+ENTRYPOINT ["sh", "entrypoint.sh"]

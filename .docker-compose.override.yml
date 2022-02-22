@@ -5,7 +5,7 @@ services:
   birracraft:
     build:
       context: ./src
-      dockerfile: Dockerfile
+      target: builder
     container_name: birracraft
     command: python manage.py runserver 0.0.0.0:8000
     env_file:
