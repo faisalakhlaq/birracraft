@@ -25,7 +25,9 @@ class FlavourAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_filters = ('state')
     list_display = ('code', 'arrived_date', 'price', 'state')
-    search_field = ('code', 'container__type', 'container__liters', 'flavour__name')
+    search_field = (
+        'code', 'container__type', 'container__liters', 'flavour__name'
+        )
 
 
 @admin.register(Quota)
@@ -43,5 +45,7 @@ class PaymentAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_filters = ('state')
-    list_display = ('date', 'price', 'delivery_cost', 'total_amount', 'customer', 'state')
+    list_display = (
+        'date', 'price', 'delivery_cost', 'total_amount', 'customer', 'state'
+        )
     search_field = ('customer__name')

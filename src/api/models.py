@@ -11,8 +11,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=120)
     email = models.EmailField()
     cellphone = models.CharField(max_length=12)
-    type = models.CharField(
-        max_length=10, choices=_type, default='CO')
+    type = models.CharField(max_length=10, choices=_type)
 
     def __str__(self):
         return '%s (%s)' % (self.name, self.type)
@@ -30,8 +29,7 @@ class Container(models.Model):
         'Bottle': [0.5, 1, 2]
     }
 
-    type = models.CharField(
-        max_length=7, choices=_type, default='Keg')
+    type = models.CharField(max_length=7, choices=_type)
     liters = models.DecimalField(max_digits=4, decimal_places=2)
 
     def select_lts(self):
@@ -71,8 +69,7 @@ class Product(models.Model):
     flavour = models.ForeignKey(Flavour, on_delete=models.CASCADE)
     arrived_date = models.DateTimeField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    state = models.CharField(
-        max_length=10, choices=_state, default='ST')
+    state = models.CharField(max_length=10, choices=_state)
 
     def __str__(self):
         return '%s - %s' % (self.container, self.flavour)
@@ -99,8 +96,7 @@ class Payment(models.Model):
     ]
     transaction = models.IntegerField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    method = models.CharField(
-        max_length=14, choices=_method, default='CA')
+    method = models.CharField(max_length=14, choices=_method)
     quotas = models.ForeignKey(Quota, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -120,8 +116,7 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
-    state = models.CharField(
-        max_length=9, choices=_state, default='GE')
+    state = models.CharField(max_length=9, choices=_state)
     comment = models.TextField()
 
     def __str__(self):
