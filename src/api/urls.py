@@ -7,6 +7,7 @@ from api import views
 
 router = SimpleRouter()
 
+router.register(r'user', views.UserViewSet, basename='user')
 router.register(r'customer', views.CustomerViewSet, basename='customer')
 router.register(r'container', views.ContainerViewSet, basename='container')
 router.register(r'flavour', views.FlavourViewSet, basename='flavour')
