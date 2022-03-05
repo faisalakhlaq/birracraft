@@ -2,17 +2,33 @@ version: '3.7'
 
 services:
 
-  birracraft:
+  api:
     build:
       context: ./src
       target: builder
-    container_name: birracraft
+    container_name: birracraft-api
     command: python manage.py runserver 0.0.0.0:8000
     env_file:
       - .env
-    volumes:
-      - ./src:/usr/src/birracraft
     ports:
       - 8000:8000
+    volumes:
+      - ./src:/usr/src/birracraft
+    restart: "always"
+    networks:
+      birracraft-net:
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: birracraft-web
+    ports:
+      - 3003:3000
+    volumes:
+      - ./web:/usr/src/web
+    depends_on:
+      - api
+    restart: "always"
     networks:
       birracraft-net:
