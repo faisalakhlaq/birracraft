@@ -53,6 +53,18 @@ services:
     networks:
       birracraft-net:
 
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: birracraft-web
+    ports:
+      - 3000:3000
+    restart: "always"
+    networks:
+      birracraft-net:
+
+
 volumes:
   pgsql_data:
   static_volume:

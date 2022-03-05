@@ -28,6 +28,15 @@ Django project started from scratch without installed dependecies in host, only 
 8. Configure `settings.py` to target the db service.
     - Use the .env.template as guidance to set the enviroment variables.
 
-#### Last Update
-`NginX` & `Gunicorn` implemented in docker network, successfully connected with birracraft container.
-After finish with this base structure, the applications development begins.
+
+#### Creating front app powered by ReactJS
+
+1. Execute in shell:
+    `$ docker run -v /home/user/path-to-project/web:/usr/src/web -it node:17-alpine3.15`
+2. Open a new tab and run:
+    `$ docker exec -it --user node "container-id" sh`
+    `/usr/src/web$ npx create-react-app .`
+
+With this commands we have the inital code structure without installing `node` on the host, just from the container.
+
+3. After that, create a basic `Dockerfile`, with the correct image, copying the files and running `npm start` to persist the container.
