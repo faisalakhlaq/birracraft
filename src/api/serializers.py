@@ -1,3 +1,4 @@
+from secrets import choice
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from api.models import *
@@ -31,3 +32,10 @@ class QuotaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quota
         fields = ('pk', 'current_quota', 'total_quota', 'value', 'date')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('pk', 'date', 'products', 'price', 'delivery_cost',
+                'total_amount', 'customer', 'payment', 'state', 'comment')

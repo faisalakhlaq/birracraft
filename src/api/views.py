@@ -28,3 +28,8 @@ class FlavourViewSet(viewsets.ModelViewSet):
 class QuotaViewSet(viewsets.ModelViewSet):
     queryset = Quota.objects.all()
     serializer_class = serializers.QuotaSerializer
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = serializers.OrderSerializer
