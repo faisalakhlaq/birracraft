@@ -12,6 +12,7 @@ router.register(r'customer', views.CustomerViewSet, basename='customer')
 router.register(r'container', views.ContainerViewSet, basename='container')
 router.register(r'flavour', views.FlavourViewSet, basename='flavour')
 router.register(r'quota', views.QuotaViewSet, basename='quota')
+router.register(r'order', views.OrderViewSet, basename='order')
 
 urlpatterns = [
     path('docs/', include_docs_urls(title='API Birracraft')),
