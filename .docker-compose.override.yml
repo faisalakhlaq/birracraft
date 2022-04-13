@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: birracraft-web
     ports:
-      - 3003:3000
+      - 3000:3000
     volumes:
       - ./web:/usr/src/web
     depends_on:
