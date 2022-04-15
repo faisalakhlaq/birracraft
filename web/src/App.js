@@ -1,20 +1,18 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Button } from '@material-ui/core';
-import CheckboxExample from './navegation.js';
+import TopBar from './components/TopBar.js';
 
 function App() {
   return (
     <React.Fragment>
       <div className="App">
         <header className="App-header">
-        <CheckboxExample/>
+        <TopBar/>
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
-          <Button variant="contained" color="primary">
           <a
             className="App-link"
             href="https://reactjs.org"
@@ -23,7 +21,6 @@ function App() {
           >
             Learn REACT crack!
           </a>
-          </Button>
         </header>
      </div>
     </React.Fragment>
