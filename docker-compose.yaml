@@ -93,6 +93,21 @@ services:
     networks:
       birracraft-net:
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: birracraft-portainer
+    command: --admin-password-file /tmp/portainer_pass
+    restart: "unless-stopped"
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./portainer:/data
+      - ./portainer/portainer_pass:/tmp/portainer_pass
+    ports:
+      - 8690:9000
+
 volumes:
   pgsql_data:
   static_volume:
