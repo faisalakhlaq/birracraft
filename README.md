@@ -12,7 +12,7 @@ All of this is implemented through _Docker_ containers.
 To run the project just use the docker-compose file.
 `$ docker-compose up --build -d`
 
-> _Portainer_: The admin's credentials would be pre-set with the portainer_pass file
+> _Portainer_: The admin's credentials would be pre-set with the portainer_pass plaintext file
 
 _docker-compose.override.yml_ is used to development phase.
 
