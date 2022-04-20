@@ -13,11 +13,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
+
+import { Link } from 'react-router-dom';
+
 import sativa_logo from '../resources/sativa_logo.jpeg';
 
 
-const pages = ['Orders', 'Payments', 'Products', 'Customers'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Account', 'Logout'];
 
 const TopBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -53,46 +55,55 @@ const TopBar = () => {
           <Toolbar disableGutters>
             <Avatar src={sativa_logo} sx={{ mr: 2 }} />
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: 'block', md: 'none' },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page}
+              <Link to="/SignIn" style={{ textDecoration: 'none' }}>
+                <Button onClick={(handleCloseNavMenu)}
+                        sx={{ my: 2, color: 'white', display: 'block',
+                        '&:hover': { color: 'black', background: 'white'} }}>
+                  Sign In
                 </Button>
-              ))}
+              </Link>
+              <Link to="/SignUp" style={{ textDecoration: 'none' }}>
+                <Button onClick={handleCloseNavMenu}
+                        sx={{ my: 2, color: 'white', display: 'block',
+                        '&:hover': { color: 'black', background: 'white'} }}>
+                  Register
+                </Button>
+              </Link>
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
+            <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
+              <Link to="/Orders" style={{ textDecoration: 'none' }}>
+                <Button onClick={(handleCloseNavMenu)}
+                        sx={{ my: 2, color: 'white', display: 'block',
+                        '&:hover': { color: 'black', background: 'white'} }}>
+                  Orders
+                </Button>
+              </Link>
+              <Link to="/Payments" style={{ textDecoration: 'none' }}>
+                <Button onClick={handleCloseNavMenu}
+                        sx={{ my: 2, color: 'white', display: 'block',
+                        '&:hover': { color: 'black', background: 'white'} }}>
+                  Payments
+                </Button>
+              </Link>
+              <Link to="/Products" style={{ textDecoration: 'none' }}>
+                <Button onClick={handleCloseNavMenu}
+                        sx={{ my: 2, color: 'white', display: 'block',
+                        '&:hover': { color: 'black', background: 'white'} }}>
+                  Products
+                </Button>
+              </Link>
+              <Link to="/Customers" style={{ textDecoration: 'none' }}>
+                <Button onClick={handleCloseNavMenu}
+                        sx={{ my: 2, color: 'white', display: 'block',
+                        '&:hover': { color: 'black', background: 'white'} }}>
+                    Customers
+                </Button>
+              </Link>    
+            </Box>
+
+            <Box sx={{ flexGrow: 0, ml: 2 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar sx={{ bgcolor: 'white' }}>
@@ -118,7 +129,7 @@ const TopBar = () => {
               >
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu} sx={{
-                    '&:hover': { background: 'grey'}
+                    '&:hover': { color: 'white', background: '#264118'}
                   }}>
                     <Typography textAlign="center" >{setting}</Typography>
                   </MenuItem>
