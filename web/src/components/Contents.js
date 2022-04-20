@@ -6,11 +6,13 @@ import Products from './Products.js';
 import Customers from './Customers.js';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
+import ResetPass from './ResetPass.js';
 
 const Contents = () => (
     <Routes>
         <Route exact path="/SignIn" element={<SignIn />} />
         <Route exact path="/SignUp" element={<SignUp />} />
+        <Route exact path="/ResetPass" element={<ResetPass />} />
         <Route exact path="/Orders" element={<Orders />} />
         <Route exact path="/Payments" element={<Payments />} />
         <Route exact path="/Products" element={<Products />} />
