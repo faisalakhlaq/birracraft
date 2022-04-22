@@ -1,30 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Button } from '@material-ui/core';
-import CheckboxExample from './navegation.js';
+import { BrowserRouter } from 'react-router-dom';
+import { Container } from '@mui/material';
+import TopBar from './components/TopBar.js';
+import Contents from './components/Contents.js';
 
 function App() {
   return (
     <React.Fragment>
       <div className="App">
-        <header className="App-header">
-        <CheckboxExample/>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <Button variant="contained" color="primary">
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn REACT crack!
-          </a>
-          </Button>
-        </header>
+        <BrowserRouter>
+          <TopBar />
+          <Container sx={{ mt: 12 }}>
+            <Contents />
+          </Container>
+        </BrowserRouter>
      </div>
     </React.Fragment>
   );
