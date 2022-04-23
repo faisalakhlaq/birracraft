@@ -6,10 +6,13 @@ from api import serializers
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny(), ]
+        return super(UserViewSet, self).get_permissions()
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
