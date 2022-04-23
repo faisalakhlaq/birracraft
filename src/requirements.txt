@@ -1,5 +1,7 @@
 django
 djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
 coreapi
 gunicorn
 psycopg2-binary
