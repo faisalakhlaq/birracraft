@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import sativa_banner from '../resources/sativa_banner2.jpg';
+import { API_AUTH_CALL } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -37,13 +39,18 @@ const theme = createTheme({
   });
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    return await API_AUTH_CALL(data.get('username'), data.get('password'))
+      .then(response => {
+        if (response.status === 200){
+          navigate('/Orders');
+        } else {
+          alert('User/Password incorrect');
+        }
+      });
   };
 
   return (
@@ -83,10 +90,10 @@ export default function SignIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
               />
               <TextField
