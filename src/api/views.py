@@ -1,9 +1,20 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
+from requests import request
 
 from api.models import *
 from api import serializers
 
+def reset(request):
+    if request.method == 'GET':
+        from django.core.mail import send_mail
+        send_mail(
+            'Subject',
+            'Message',
+            'mati@seni.com',
+            ['allowed@receivers.com'],
+            fail_silently=False
+        )
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

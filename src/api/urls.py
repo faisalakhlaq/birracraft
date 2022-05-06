@@ -16,5 +16,6 @@ router.register(r'order', views.OrderViewSet, basename='order')
 
 urlpatterns = [
     path('docs/', include_docs_urls(title='API Birracraft')),
+    path('reset/', views.reset),
     path('', include((router.urls, 'Birracraft'), namespace='Birracraft')),
 ]
