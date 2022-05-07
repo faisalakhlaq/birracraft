@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+
+from rest_framework import viewsets, permissions
+
 from requests import request
 
 from api.models import *
@@ -20,6 +22,10 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny(), ]
+        return super(UserViewSet, self).get_permissions()
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()

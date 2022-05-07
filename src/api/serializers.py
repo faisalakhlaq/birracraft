@@ -1,13 +1,24 @@
-from secrets import choice
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from api.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if User.objects.filter(email__exact=value).exists():
+            raise serializers.ValidationError("Duplicate")
+        return value
+
+    def create(self, validate_data):
+        validate_data['password'] = make_password(validate_data['password'])
+        return super(UserSerializer, self).create(validate_data)
+
     class Meta:
         model = User
-        fields = ('pk', 'username', 'email', 'is_staff')
+        fields = ('pk', 'username', 'password', 'email', 'is_staff')
 
 
 class CustomerSerializer(serializers.ModelSerializer):
