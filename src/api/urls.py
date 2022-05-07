@@ -19,8 +19,10 @@ router.register(r'quota', views.QuotaViewSet, basename='quota')
 router.register(r'order', views.OrderViewSet, basename='order')
 
 urlpatterns = [
+    path('docs/', include_docs_urls(title='API Birracraft')),
     path('docs/', include_docs_urls(title='API Birracraft', permission_classes=[AllowAny,])),
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('reset/', views.reset),
     path('', include((router.urls, 'Birracraft'), namespace='Birracraft')),
 ]

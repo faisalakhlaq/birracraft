@@ -35,3 +35,13 @@ services:
     restart: "always"
     networks:
       birracraft-net:
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: birracraft-mailhog
+    ports:
+      - 1025:1025  # SMTP Server
+      - 8025:8025  # Web UI
+    restart: "always"
+    networks:
+      birracraft-net:

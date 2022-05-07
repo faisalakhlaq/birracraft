@@ -132,6 +132,18 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = '/static/'
 
+# SMTP configuration
+
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+
+EMAIL_USE_TLS = (os.getenv('EMAIL_USE_TLS', 'False') == 'True')
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+
+EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
