@@ -1,6 +1,6 @@
-from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from rest_framework import serializers
 from api.models import *
 
 
@@ -18,7 +18,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'password', 'email', 'is_staff')
+        fields = ('pk', 'username', 'password',
+                    'email', 'is_staff', 'is_active')
 
 
 class CustomerSerializer(serializers.ModelSerializer):

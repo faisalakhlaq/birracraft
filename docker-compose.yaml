@@ -25,7 +25,7 @@ services:
     container_name: birracraft-nginx
     ports:
       - "8680:80"
-      - "8686:86"
+      - "80:86"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/static
