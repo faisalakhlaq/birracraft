@@ -14,7 +14,8 @@ To run the project just use the docker-compose file.
 
 > _Portainer_: The admin's credentials would be pre-set with the portainer_pass plaintext file
 
-_docker-compose.override.yml_ is used to development phase.
+
+_docker-compose.override.yml_ is used to __development phase__.
 
 * Keep in mind that for you to run the _override_ with the _volume_ for
 the _web_ service it's necessary to config the _sysctl_ in the docker host.  
@@ -25,3 +26,5 @@ its limit and this will raise an error.
     - `# sysctl -p`  
     - Generally, in gnu/linux hosts, the default max watches is 8196. To see the current number run:  
     `$ cat /proc/sys/fs/inotify/max_user_watches`
+
+* A SMTP service is implemented to test mailing features. Set correctly the variables on _.env_ file depending if you are going to be using this fake SMTP server or a real one.

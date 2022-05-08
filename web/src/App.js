@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Container } from '@mui/material';
 import TopBar from './components/TopBar.js';
 import Contents from './components/Contents.js';
+import Footer from './components/Footer.js';
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
           <Container sx={{ mt: 12 }}>
             <Contents />
           </Container>
+          <Footer />
         </BrowserRouter>
      </div>
     </React.Fragment>

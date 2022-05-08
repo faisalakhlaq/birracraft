@@ -1,13 +1,42 @@
+from django.conf import settings
 from django.contrib.auth.models import User
-from rest_framework import viewsets
-
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.shortcuts import redirect
+from rest_framework import viewsets, permissions
 from api.models import *
-from api import serializers
+from api import serializers, utils
+
+
+def activate_user(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(email=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user and utils.account_activation_token.check_token(user.email, token):
+        user.is_active = True
+        user.save(update_fields=['is_active'])
+        site = settings.WEB_SITE_URL + '/ActivationSuccess'
+    else:
+        site = settings.WEB_SITE_URL + '/ActivationFail'
+    return redirect(site)
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny(), ]
+        return super(UserViewSet, self).get_permissions()
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        if response.status_code == 201:
+            utils.send_verification_mail(request)
+        return response
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
