@@ -16,19 +16,6 @@ import sativa_banner from '../resources/sativa_banner2.jpg';
 import { API_AUTH_CALL } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit"
-        href="https://github.com/matiseni51/birracraft/" target="_blank">
-        Birracraft
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme({
     palette: {
@@ -126,7 +113,6 @@ export default function SignIn() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>

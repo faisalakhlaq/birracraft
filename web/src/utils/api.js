@@ -59,3 +59,18 @@ export const API_DATA_CALL = async (method, endpoint) => {
 
   return response.json();
 };
+
+export const API_SIGNUP_CALL = async (new_user_data) => {
+  const response = await fetch(
+    `${BASE_URL}/user/`,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(new_user_data)
+    }
+  );
+  return response;
+}

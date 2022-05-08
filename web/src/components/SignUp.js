@@ -12,21 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { API_DATA_CALL } from '../utils/api.js';
+import { API_SIGNUP_CALL } from '../utils/api.js';
+import { useNavigate } from 'react-router-dom';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit"
-        href="https://github.com/matiseni51/birracraft/" target="_blank">
-        Birracraft
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme({
     palette: {
@@ -37,13 +25,24 @@ const theme = createTheme({
   });
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
-    const response = API_DATA_CALL('GET', '/user/')
-    .then(data => ({
-         data: data,
-         status: response.status
-       })).then(res => {console.log(res.status, res.data)});
+    const data = new FormData(event.currentTarget);
+    const response = API_SIGNUP_CALL({
+      'first_name': data.get('firstName'),
+      'last_name': data.get('lastName'),
+      'email': data.get('email'),
+      'username': data.get('username'),
+      'password': data.get('password'),
+    })
+    .then(response => {
+      if (response.status === 201){
+        navigate('/Registration/RegistrationSuccess');
+      } else {
+        navigate('/Registration/RegistrationFail');
+      }
+    });
   };
 
   return (
@@ -101,6 +100,16 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   name="password"
                   label="Password"
                   type="password"
@@ -126,7 +135,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );

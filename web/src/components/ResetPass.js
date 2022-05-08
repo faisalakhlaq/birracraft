@@ -5,20 +5,6 @@ import { Box } from "@mui/system";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit"
-        href="https://github.com/matiseni51/birracraft/" target="_blank">
-        Birracraft
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 const theme = createTheme({
     palette: {
       primary: {
@@ -71,7 +57,6 @@ export default function ResetPass() {
               Send
             </Button>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
        </Container>
     </ThemeProvider>
   );
