@@ -1,11 +1,17 @@
+from email.policy import default
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from pkg_resources import require
 from rest_framework import serializers
 from api.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
+    is_active = serializers.BooleanField(
+        required=False,
+        default=False
+    )
 
     def validate_email(self, value):
         if User.objects.filter(email__exact=value).exists():
@@ -18,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'password',
+        fields = ('pk', 'username', 'password', 'first_name', 'last_name',
                     'email', 'is_staff', 'is_active')
 
 
