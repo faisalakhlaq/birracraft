@@ -38,9 +38,9 @@ export default function SignUp() {
     })
     .then(response => {
       if (response.status === 201){
-        navigate('/Registration/RegistrationSuccess');
+        navigate('/RegistrationSuccess');
       } else {
-        navigate('/Registration/RegistrationFail');
+        navigate('/RegistrationFail');
       }
     });
   };
