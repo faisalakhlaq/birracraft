@@ -1,7 +1,5 @@
-from email.policy import default
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from pkg_resources import require
 from rest_framework import serializers
 from api.models import *
 
@@ -26,6 +24,15 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('pk', 'username', 'password', 'first_name', 'last_name',
                     'email', 'is_staff', 'is_active')
+
+
+class UserResetPassSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class UserNewPassSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
 
 
 class CustomerSerializer(serializers.ModelSerializer):
