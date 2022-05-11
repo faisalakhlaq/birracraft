@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
@@ -9,6 +8,7 @@ from api import serializers, utils
 
 
 def activate_user(request, uidb64, token):
+    site = request.scheme + request.get_host()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(email=uid)
@@ -17,9 +17,9 @@ def activate_user(request, uidb64, token):
     if user and utils.account_activation_token.check_token(user.email, token):
         user.is_active = True
         user.save(update_fields=['is_active'])
-        site = settings.WEB_SITE_URL + '/ActivationSuccess'
+        site += '/ActivationSuccess'
     else:
-        site = settings.WEB_SITE_URL + '/ActivationFail'
+        site += '/ActivationFail'
     return redirect(site)
 
 

@@ -1,7 +1,5 @@
-from email.policy import default
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from pkg_resources import require
 from rest_framework import serializers
 from api.models import *
 
