@@ -3,6 +3,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Avatar, Button, Container, Link, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { API_NOAUTH_CALL } from '../../utils/api.js';
+import { useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme({
@@ -14,12 +16,18 @@ const theme = createTheme({
   });
 
 export default function ResetPass() {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const response = API_NOAUTH_CALL('/user/reset_pass/', {
+      'email': data.get('email'),
+    }).then(response => {
+      if (response.status === 200){
+        navigate('/ResetPassSent');
+      } else {
+        navigate('/ResetPassFail');
+      }
     });
   };
 
@@ -27,6 +35,8 @@ export default function ResetPass() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <Box
+          component="form"
+          onSubmit={handleSubmit}
           sx={{
             marginTop: 8,
             display: 'flex',

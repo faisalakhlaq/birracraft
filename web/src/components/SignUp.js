@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { API_SIGNUP_CALL } from '../utils/api.js';
+import { API_NOAUTH_CALL } from '../utils/api.js';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -29,14 +29,13 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const response = API_SIGNUP_CALL({
+    const response = API_NOAUTH_CALL('/user/', {
       'first_name': data.get('firstName'),
       'last_name': data.get('lastName'),
       'email': data.get('email'),
       'username': data.get('username'),
       'password': data.get('password'),
-    })
-    .then(response => {
+    }).then(response => {
       if (response.status === 201){
         navigate('/RegistrationSuccess');
       } else {

@@ -26,6 +26,15 @@ class UserSerializer(serializers.ModelSerializer):
                     'email', 'is_staff', 'is_active')
 
 
+class UserResetPassSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class UserNewPassSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer

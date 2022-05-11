@@ -1,14 +1,18 @@
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.shortcuts import redirect
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from api.models import *
 from api import serializers, utils
 
 
 def activate_user(request, uidb64, token):
-    site = request.scheme + request.get_host()
+    protocol = request.scheme + '://'
+    host = request.get_host().split(':')[0]
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(email=uid)
@@ -17,18 +21,42 @@ def activate_user(request, uidb64, token):
     if user and utils.account_activation_token.check_token(user.email, token):
         user.is_active = True
         user.save(update_fields=['is_active'])
-        site += '/ActivationSuccess'
+        page = '/ActivationSuccess'
     else:
-        site += '/ActivationFail'
+        page = '/ActivationFail'
+    site = protocol + host + page
+    return redirect(site)
+
+
+def reset_password(request, uidb64, token):
+    protocol = request.scheme + '://'
+    host = request.get_host().split(':')[0]
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user and utils.account_activation_token.check_token(user, token):
+        page = '/ResetPassForm'
+    else:
+        page = '/ResetPassInvalidLink'
+    site = protocol + host + page
     return redirect(site)
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'reset_pass':
+            return serializers.UserResetPassSerializer
+        elif self.action == 'set_new_pass':
+            return serializers.UserNewPassSerializer
+        else:
+            return serializers.UserSerializer
 
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action in ['create', 'reset_pass', 'set_new_pass']:
             return [permissions.AllowAny(), ]
         return super(UserViewSet, self).get_permissions()
 
@@ -38,6 +66,41 @@ class UserViewSet(viewsets.ModelViewSet):
             utils.send_verification_mail(request)
         return response
 
+    @action(methods=('post', ), detail=False)
+    def reset_pass(self, *args, **kwargs):
+        serializer = self.get_serializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            user = User.objects.get(email=serializer.validated_data['email'])
+            utils.send_reset_pass_mail(self.request, user)
+            return Response({
+                'username': user.username,
+                'email': user.email,
+                })
+        except Exception as e:
+            return JsonResponse(
+                data={'code': 500, 'message': str(e)}, status=500
+            )
+
+    @action(methods=('post', ), detail=False)
+    def set_new_pass(self, *args, **kwargs):
+        serializer = self.get_serializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            print(serializer.validated_data['username'])
+            user = User.objects.get(
+                username=serializer.validated_data['username']
+                )
+            user.set_password(serializer.validated_data['password'])
+            user.save()
+            return Response({
+                'username': user.username,
+                'email': user.email,
+                })
+        except Exception as e:
+            return JsonResponse(
+                data={'code': 500, 'message': str(e)}, status=500
+            )
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()

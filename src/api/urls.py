@@ -26,5 +26,7 @@ urlpatterns = [
         name='token_refresh'),
     path('user/activate/<slug:uidb64>/<slug:token>/',
         views.activate_user, name='activate_user'),
+    path('user/reset_password/<slug:uidb64>/<slug:token>/',
+        views.reset_password, name='reset_password'),
     path('', include((router.urls, 'Birracraft'), namespace='Birracraft')),
 ]

@@ -6,7 +6,12 @@ import RegistrationSuccess from './registration/RegistrationSuccess.js';
 import RegistrationFail from './registration/RegistrationFail.js';
 import ActivationSuccess from './registration/ActivationSuccess.js';
 import ActivationFail from './registration/ActivationFail.js';
-import ResetPass from './ResetPass.js';
+import ResetPass from './resetPass/ResetPass.js';
+import ResetPassForm from './resetPass/ResetPassForm.js';
+import ResetPassSent from './resetPass/ResetPassSent.js';
+import ResetPassInvalidLink from './resetPass/ResetPassInvalidLink';
+import ResetPassSuccess from './resetPass/ResetPassSuccess.js';
+import ResetPassFail from './resetPass/ResetPassFail.js';
 import Orders from './Orders.js';
 import Payments from './Payments.js';
 import Products from './Products.js';
@@ -22,6 +27,11 @@ const Contents = () => (
         <Route exact path="/ActivationSuccess" element={<ActivationSuccess />} />
         <Route exact path="/ActivationFail" element={<ActivationFail />} />
         <Route exact path="/ResetPass" element={<ResetPass />} />
+        <Route exact path="/ResetPassForm" element={<ResetPassForm />} />
+        <Route exact path="/ResetPassSent" element={<ResetPassSent />} />
+        <Route exact path="/ResetPassInvalidLink" element={<ResetPassInvalidLink />} />
+        <Route exact path="/ResetPassSuccess" element={<ResetPassSuccess />} />
+        <Route exact path="/ResetPassFail" element={<ResetPassFail />} />
         <Route exact path="/Orders" element={<Orders />} />
         <Route exact path="/Payments" element={<Payments />} />
         <Route exact path="/Products" element={<Products />} />

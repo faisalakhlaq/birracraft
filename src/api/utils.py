@@ -7,6 +7,24 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import six
 
 
+def send_reset_pass_mail(request, user):
+    msg=render_to_string('../templates/reset_pass_mail.html',{
+        'username': user.username,
+        'protocol': request.scheme,
+        'domain': request.get_host(),
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        })
+    confirm_email = EmailMessage(
+        subject='Password reset on Birracraft',
+        body=msg,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[request.data['email']],
+    )
+    confirm_email.content_subtype = 'html'
+    confirm_email.send()
+
+
 def send_verification_mail(request):
     user_email = request.data['email']
     msg=render_to_string('../templates/validate_user_mail.html',{
