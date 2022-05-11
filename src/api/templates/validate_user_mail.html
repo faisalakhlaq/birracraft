@@ -40,7 +40,7 @@
             <h1 style="font-family: Arial;">Hi {{ username }}!</h1>
             <p style="font-family: Arial;">
                 You have register to Birracraft, to complete this process we need you to validate the account by clicking in the following link:
-                <a href="http://{{ domain }}{% url 'activate_user' uidb64=uid token=token %}">Activate it!</a>
+                <a href="{{ protocol }}://{{ domain }}{% url 'activate_user' uidb64=uid token=token %}">Activate it!</a>
             <p>
         </div>
     </body>
