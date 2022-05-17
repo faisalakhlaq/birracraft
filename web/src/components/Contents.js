@@ -12,6 +12,7 @@ import ResetPassSent from './resetPass/ResetPassSent.js';
 import ResetPassInvalidLink from './resetPass/ResetPassInvalidLink';
 import ResetPassSuccess from './resetPass/ResetPassSuccess.js';
 import ResetPassFail from './resetPass/ResetPassFail.js';
+import PrivateContent from './PrivateContent.js';
 import Orders from './Orders.js';
 import Payments from './Payments.js';
 import Products from './Products.js';
@@ -32,10 +33,12 @@ const Contents = () => (
         <Route exact path="/ResetPassInvalidLink" element={<ResetPassInvalidLink />} />
         <Route exact path="/ResetPassSuccess" element={<ResetPassSuccess />} />
         <Route exact path="/ResetPassFail" element={<ResetPassFail />} />
-        <Route exact path="/Orders" element={<Orders />} />
-        <Route exact path="/Payments" element={<Payments />} />
-        <Route exact path="/Products" element={<Products />} />
-        <Route exact path="/Customers" element={<Customers />} />
+        <Route exact path="/" element={<PrivateContent />}>
+					<Route exact path="/Orders" element={<Orders />} />
+					<Route exact path="/Payments" element={<Payments />} />
+					<Route exact path="/Products" element={<Products />} />
+					<Route exact path="/Customers" element={<Customers />} />
+				</Route>
     </Routes>
 );
 

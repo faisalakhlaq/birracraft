@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import sativa_logo from '../resources/sativa_logo.png';
 
@@ -22,6 +22,8 @@ import sativa_logo from '../resources/sativa_logo.png';
 const settings = ['Profile', 'Account', 'Logout'];
 
 const TopBar = () => {
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -40,6 +42,13 @@ const TopBar = () => {
     setAnchorElUser(null);
   };
 
+  const handleAction = (option) => {
+    if (option === "Logout") {
+      window.localStorage.removeItem('authTokens');
+      navigate('/SignIn');
+    }
+  };
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -48,13 +57,15 @@ const TopBar = () => {
     },
   });
 
+  const auth = window.localStorage.getItem('authTokens');
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="absolute">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Avatar src={sativa_logo} sx={{ mr: 2 }} />
-
+            {!auth && (
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Link to="/SignIn" style={{ textDecoration: 'none' }}>
                 <Button onClick={(handleCloseNavMenu)}
@@ -71,8 +82,9 @@ const TopBar = () => {
                 </Button>
               </Link>
             </Box>
-
-            <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
+            )}
+            {auth && (
+            <Box ml={'auto'} sx={{ flexGrow: 0, display: { md: 'flex' } }}>
               <Link to="/Orders" style={{ textDecoration: 'none' }}>
                 <Button onClick={(handleCloseNavMenu)}
                         sx={{ my: 2, color: 'white', display: 'block',
@@ -101,11 +113,8 @@ const TopBar = () => {
                     Customers
                 </Button>
               </Link>    
-            </Box>
-
-            <Box sx={{ flexGrow: 0, ml: 2 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
                   <Avatar sx={{ bgcolor: 'white' }}>
                     <PersonIcon color="primary"/>
                   </Avatar>
@@ -128,7 +137,9 @@ const TopBar = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu} sx={{
+                  <MenuItem key={setting}
+                    onClick={() => handleAction(setting)}
+                    sx={{
                     '&:hover': { color: 'white', background: '#264118'}
                   }}>
                     <Typography textAlign="center" >{setting}</Typography>
@@ -136,6 +147,7 @@ const TopBar = () => {
                 ))}
               </Menu>
             </Box>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
