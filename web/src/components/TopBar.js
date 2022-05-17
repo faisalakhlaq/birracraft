@@ -16,7 +16,7 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import { Link } from 'react-router-dom';
 
-import sativa_logo from '../resources/sativa_logo.jpeg';
+import sativa_logo from '../resources/sativa_logo.png';
 
 
 const settings = ['Profile', 'Account', 'Logout'];
