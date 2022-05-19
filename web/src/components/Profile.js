@@ -3,7 +3,8 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { API_DATA_CALL, API_DATA_CALL_2 } from '../utils/api';
+import { API_DATA_CALL } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme({
@@ -17,6 +18,8 @@ const theme = createTheme({
 export default function Profile(){
   const [disable, setDisable] = useState(true);
 	const [profile, setProfile] = useState({});
+
+	const navigate = useNavigate();
 
 	useEffect(async () => {
 		const user = JSON.parse(window.localStorage.getItem('authUser'));
@@ -44,7 +47,12 @@ export default function Profile(){
 				'last_name': data.get('lastName'),
 			},
 		).then(response => {
-			console.log(response);
+			if (response){
+				alert('changes implemented');
+				navigate('/');
+			} else {
+				navigate('/RegistrationFail');
+			}
 		});
 	}
 
