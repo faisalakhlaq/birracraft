@@ -46,7 +46,12 @@ const TopBar = () => {
     if (option === "Logout") {
       window.localStorage.removeItem('authTokens');
       navigate('/SignIn');
+    } else if (option === "Profile"){
+      navigate('/Profile');
+    } else {
+      navigate('/Customers');
     }
+    handleCloseUserMenu();
   };
 
   const theme = createTheme({
@@ -112,7 +117,7 @@ const TopBar = () => {
                         '&:hover': { color: 'black', background: 'white'} }}>
                     Customers
                 </Button>
-              </Link>    
+              </Link>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
                   <Avatar sx={{ bgcolor: 'white' }}>

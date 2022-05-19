@@ -17,10 +17,12 @@ import Orders from './Orders.js';
 import Payments from './Payments.js';
 import Products from './Products.js';
 import Customers from './Customers.js';
+import Profile from './Profile.js';
 
 
 const Contents = () => (
     <Routes>
+				<Route exact path="/" element={<SignIn />} />
         <Route exact path="/SignIn" element={<SignIn />} />
         <Route exact path="/SignUp" element={<SignUp />} />
         <Route exact path="/RegistrationSuccess" element={<RegistrationSuccess />} />
@@ -38,6 +40,7 @@ const Contents = () => (
 					<Route exact path="/Payments" element={<Payments />} />
 					<Route exact path="/Products" element={<Products />} />
 					<Route exact path="/Customers" element={<Customers />} />
+					<Route exact path="/Profile" element={<Profile />} />
 				</Route>
     </Routes>
 );

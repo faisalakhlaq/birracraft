@@ -11,6 +11,7 @@ export const API_AUTH_CALL = async (username: string, password: string) => {
   const tokens = await response.json();
   if (response.status === 200){
     window.localStorage.setItem('authTokens', JSON.stringify(tokens));
+    window.localStorage.setItem('authUser', body);
   }
   return response;
 };
@@ -36,7 +37,7 @@ export const API_AUTH_REFRESH_CALL = async (authTokens) => {
   }
 };
 
-export const API_DATA_CALL = async (method, endpoint) => {
+export const API_DATA_CALL = async (method, endpoint, data=null) => {
   const authTokens = JSON.parse(window.localStorage.getItem('authTokens'));
   const url = `${BASE_URL}${endpoint}`;
   const headers = new Headers(
@@ -46,12 +47,13 @@ export const API_DATA_CALL = async (method, endpoint) => {
       Authorization: `Bearer ${authTokens?.access}`
     }
   );
-  const params = {method: `${method}`, headers};
+  const body = data ? JSON.stringify(data) : null;
+  const params = {method: `${method}`, headers, body};
   const response = await fetch(url, params);
   if (response.statusText === 'Unauthorized'){
     const authRefreshTokens = await API_AUTH_REFRESH_CALL(authTokens);
     headers.set('Authorization', `Bearer ${authRefreshTokens?.access}`);
-    const params = {method: `${method}`, headers};
+    const params = {method: `${method}`, headers, body};
     const response = await fetch(url, params);
     const data = await response.json();
     return data;
