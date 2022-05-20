@@ -3,12 +3,13 @@ from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.shortcuts import redirect
+from django.core import serializers as s
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from api.models import *
 from api import serializers, utils
-
+import json
 
 def activate_user(request, uidb64, token):
     protocol = request.scheme + '://'
@@ -47,6 +48,8 @@ def reset_password(request, uidb64, token):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
+    lookup_field = 'username'
+
     def get_serializer_class(self):
         if self.action == 'reset_pass':
             return serializers.UserResetPassSerializer
@@ -65,6 +68,18 @@ class UserViewSet(viewsets.ModelViewSet):
         if response.status_code == 201:
             utils.send_verification_mail(request)
         return response
+
+    @action(methods=('get', ), detail=True)
+    def get_user_by_username(self, *args, **kwargs):
+        try:
+            user = User.objects.get(username=kwargs.get(self.lookup_field))
+            user_json = s.serialize('json', [user, ])
+            data = json.loads(user_json)[0]
+            return Response(data)
+        except Exception as e:
+            return JsonResponse(
+                data={'code': 500, 'message': str(e)}, status=500
+            )
 
     @action(methods=('post', ), detail=False)
     def reset_pass(self, *args, **kwargs):
