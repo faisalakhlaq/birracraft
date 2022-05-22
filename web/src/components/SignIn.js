@@ -3,9 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -13,8 +10,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import sativa_banner from '../resources/sativa_banner2.jpg';
+import ModalPopUp from './ModalPopUp';
 import { API_AUTH_CALL } from '../utils/api';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme({
@@ -27,6 +25,11 @@ const theme = createTheme({
 
 export default function SignIn() {
   const navigate = useNavigate();
+
+  const [ modal, setModal ] = React.useState(false);
+
+  const handleClose = () => setModal(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -35,7 +38,7 @@ export default function SignIn() {
         if (response.status === 200){
           navigate('/Orders');
         } else {
-          alert('User/Password incorrect');
+          setModal(true);
         }
       });
   };
@@ -103,12 +106,18 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="/ResetPass" variant="body2">
+                  <Link to="/ResetPass" style={{
+                    color: 'inherit',
+                    textDecoration: 'inherit',
+                    }}>
                     Forgot password?
                   </Link>
                 </Grid>
-                <Grid item>
-                  <Link href="/SignUp" variant="body2">
+                <Grid item xs>
+                  <Link to="/SignUp" style={{
+                    color: 'inherit',
+                    textDecoration: 'inherit',
+                    }}>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -117,6 +126,12 @@ export default function SignIn() {
           </Box>
         </Grid>
       </Grid>
+      <ModalPopUp open={modal} onClose={handleClose}
+        title={'User/Password incorrect'}
+        body={
+          'The input data is incorrect. Check that the credentials used'
+        }
+        />
     </ThemeProvider>
   );
 }

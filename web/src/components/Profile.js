@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { API_DATA_CALL } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
+import ModalPopUp from './ModalPopUp';
 
 
 const theme = createTheme({
@@ -18,6 +19,7 @@ const theme = createTheme({
 export default function Profile(){
   const [disable, setDisable] = useState(true);
 	const [profile, setProfile] = useState({});
+	const [modal, setModal] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -35,6 +37,11 @@ export default function Profile(){
 		setDisable(false);
 	}
 
+	const handleClose = () => {
+		setModal(false)
+		navigate('/');
+	};
+
 	const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -48,8 +55,7 @@ export default function Profile(){
 			},
 		).then(response => {
 			if (response){
-				alert('changes implemented');
-				navigate('/');
+				setModal(true);
 			} else {
 				navigate('/RegistrationFail');
 			}
@@ -109,6 +115,12 @@ export default function Profile(){
 					</Grid>
 				</div>
 			</Box>
+      <ModalPopUp open={modal} onClose={handleClose}
+        title={'Changes implemented'}
+        body={
+          'Your profile data was updated.'
+        }
+        />
 		</ThemeProvider>
   )
 }
