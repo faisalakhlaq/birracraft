@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import Home from './Home.js';
 import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
 import RegistrationSuccess from './registration/RegistrationSuccess.js';
@@ -22,7 +23,7 @@ import Profile from './Profile.js';
 
 const Contents = () => (
     <Routes>
-				<Route exact path="/" element={<SignIn />} />
+				<Route exact path="/" element={<Home />} />
         <Route exact path="/SignIn" element={<SignIn />} />
         <Route exact path="/SignUp" element={<SignUp />} />
         <Route exact path="/RegistrationSuccess" element={<RegistrationSuccess />} />
