@@ -5,7 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { API_DATA_CALL } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-import ModalPopUp from './ModalPopUp';
+import ModalPopUp from './popups/ModalPopUp';
 
 
 const theme = createTheme({
@@ -17,7 +17,7 @@ const theme = createTheme({
 });
 
 export default function Profile(){
-  const [disable, setDisable] = useState(true);
+	const [disable, setDisable] = useState(true);
 	const [profile, setProfile] = useState({});
 	const [modal, setModal] = useState(false);
 
