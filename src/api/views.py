@@ -121,6 +121,10 @@ class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = serializers.CustomerSerializer
 
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        return Response({'status': response.status_code})
+
 
 class ContainerViewSet(viewsets.ModelViewSet):
     queryset = Container.objects.all()

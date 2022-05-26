@@ -69,7 +69,9 @@ const TopBar = () => {
       <AppBar position="absolute">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Avatar src={sativa_logo} sx={{ mr: 2 }} />
+            <Link to="/">
+              <Avatar src={sativa_logo} sx={{ mr: 2 }} />
+            </Link>
             {!auth && (
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Link to="/SignIn" style={{ textDecoration: 'none' }}>
