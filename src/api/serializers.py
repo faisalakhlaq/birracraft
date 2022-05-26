@@ -53,6 +53,13 @@ class FlavourSerializer(serializers.ModelSerializer):
         fields = ('pk', 'name', 'description', 'price_per_lt')
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ('pk', 'code', 'container', 'flavour',
+                'arrived_date', 'price', 'state')
+
+
 class QuotaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quota
