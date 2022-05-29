@@ -13,13 +13,13 @@ import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import SettingsIcon from '@mui/icons-material/Settings';
-import DialogNewProduct from './popups/DialogNewProduct';
-import DialogDeleteProduct from './popups/DialogDeleteProduct';
+import DialogNewFlavour from './popups/DialogNewFlavour';
+import DialogEditFlavour from './popups/DialogEditFlavour';
+import DialogDeleteFlavour from './popups/DialogDeleteFlavour';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, Grid } from '@mui/material';
 import { API_DATA_CALL } from '../utils/api.js';
-import { useNavigate } from 'react-router-dom';
+
 
 
 const theme = createTheme({
@@ -31,11 +31,11 @@ const theme = createTheme({
 });
 
 
-export default function Products() {
+export default function Flavours() {
 	const [newModal, setNewModal] = React.useState(false);
 	const [deleteModal, setDeleteModal] = React.useState(false);
 	const [editModal, setEditModal] = React.useState(false);
-	const [products, setProducts] = React.useState([]);
+	const [flavours, setFlavours] = React.useState([]);
 	const [rowSelected, setRowSelected] = React.useState('');
 
   const [page, setPage] = React.useState(0);
@@ -74,10 +74,8 @@ export default function Products() {
 		const data = JSON.stringify({
 			pk: row.pk,
 			name: row.name,
-			email: row.email,
-			cellphone: row.cellphone,
-			address: row.address,
-			type: row.type
+			description: row.description,
+			price_per_lt: row.price_per_lt,
 			});
 		setRowSelected(data);
 	}
@@ -89,31 +87,21 @@ export default function Products() {
 	React.useEffect(async () => {
 		const data = await API_DATA_CALL(
 			'GET',
-			`/product/`
+			`/flavour/`
 		);
-		setProducts(data);
+		setFlavours(data);
 	}, []);
 
-	const navigate = useNavigate();
 
   return (
     <ThemeProvider theme={theme}>
-			<Grid container spacing={0}>
-				<Grid item md={8} sx={{ textAlign: "left" }}>
-					<Typography variant="h3" color="primary">
-						Products
+			<Grid container>
+				<Grid item>
+					<Typography variant="h4" color="primary">
+						Flavours
 					</Typography>
 				</Grid>
-				<Grid item md={4} sx={{ textAlign: "right" }}>
-					<Button variant='contained'
-						size='small'
-						onClick={() => {navigate('/ContainersFlavours')}}
-						startIcon={<SettingsIcon />} >
-						Containers & Flavours
-					</Button>
-				</Grid>
-				<Grid item md={8} />
-				<Grid item md={4} sx={{ textAlign: "right" }}>
+				<Grid item xs sx={{ textAlign: "right" }}>
 					<Button variant='contained'
 						size='small' onClick={handleOpen}
 						startIcon={<AddCircleIcon />} >
@@ -126,44 +114,49 @@ export default function Products() {
 					<Table size="small">
 						<TableHead>
 							<TableRow>
-								<TableCell><b>Code</b></TableCell>
-								<TableCell><b>Container</b></TableCell>
-								<TableCell><b>Flavour</b></TableCell>
-								<TableCell><b>Arrived Date</b></TableCell>
-								<TableCell><b>Price</b></TableCell>
-								<TableCell><b>State</b></TableCell>
+								<TableCell><b>Name</b></TableCell>
+								<TableCell><b>Description</b></TableCell>
+								<TableCell><b>Price per lt</b></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{products
+							{flavours
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((row) => (
-								<TableRow key={row.pk}>
-									<TableCell>{row.code}</TableCell>
-									<TableCell>{row.container}</TableCell>
-									<TableCell>{row.flavour}</TableCell>
-									<TableCell>{row.arrived_date}</TableCell>
-									<TableCell>{row.price}</TableCell>
-									<TableCell>{row.state}</TableCell>
-									<TableCell align="right">
-										<Button variant='contained'
-											size='small'
-											startIcon={<DeleteIcon />}
-											onClick={(e) => handleOpenDelete(row, e)}>
-											Delete
-										</Button>
-									</TableCell>
-									<DialogDeleteProduct 
-												open={deleteModal}
-												onClose={handleCloseDelete}
-												row={rowSelected}
-												/>
-								</TableRow>
-							))}
+									<TableRow key={row.pk}>
+										<TableCell>{row.name}</TableCell>
+										<TableCell>{row.description}</TableCell>
+										<TableCell>{row.price_per_lt}</TableCell>
+										<TableCell align="right">
+											<Button variant='outlined'
+												size='small' sx={{ mr: 2 }}
+												startIcon={<EditIcon />}
+												onClick={(e) => handleOpenEdit(row, e)}>
+												Edit
+											</Button>
+											<Button variant='contained'
+												size='small'
+												startIcon={<DeleteIcon />}
+												onClick={(e) => handleOpenDelete(row, e)}>
+												Delete
+											</Button>
+										</TableCell>
+										<DialogEditFlavour
+											open={editModal}
+											onClose={handleCloseEdit}
+											row={rowSelected}
+										/>
+										<DialogDeleteFlavour
+											open={deleteModal}
+											onClose={handleCloseDelete}
+											row={rowSelected}
+										/>
+									</TableRow>
+								))}
 							<TableRow>
 								<TablePagination
 									rowsPerPageOptions={[5, 25, 100]}
-									count={products.length}
+									count={flavours.length}
 									rowsPerPage={rowsPerPage}
 									page={page}
 									onPageChange={handleChangePage}
@@ -174,7 +167,7 @@ export default function Products() {
 					</Table>
 				</TableContainer>
 			</Paper>
-			<DialogNewProduct open={newModal} onClose={handleClose}/>
+			<DialogNewFlavour open={newModal} onClose={handleClose}/>
 		</ThemeProvider>
-	);
+  );
 }

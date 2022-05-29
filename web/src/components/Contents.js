@@ -17,6 +17,7 @@ import PrivateContent from './PrivateContent.js';
 import Orders from './Orders.js';
 import Payments from './Payments.js';
 import Products from './Products.js';
+import ContainersFlavours from './ContainersFlavours.js';
 import Customers from './Customers.js';
 import Profile from './Profile.js';
 
@@ -40,6 +41,7 @@ const Contents = () => (
 					<Route exact path="/Orders" element={<Orders />} />
 					<Route exact path="/Payments" element={<Payments />} />
 					<Route exact path="/Products" element={<Products />} />
+          <Route exact path="/ContainersFlavours" element={<ContainersFlavours />} />
 					<Route exact path="/Customers" element={<Customers />} />
 					<Route exact path="/Profile" element={<Profile />} />
 				</Route>
