@@ -53,6 +53,25 @@ class FlavourSerializer(serializers.ModelSerializer):
         fields = ('pk', 'name', 'description', 'price_per_lt')
 
 
+class ProductSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        container_data = Container.objects.get(pk=representation['container'])
+        representation['container'] = '%s - %s lt' \
+            % (container_data.type, container_data.liters)
+        representation['flavour'] = Flavour.objects.get(
+            pk=representation['flavour']).name
+        representation['arrived_date'] = representation['arrived_date'] \
+            .split('T')[0]
+        return representation
+
+    class Meta:
+        model = Product
+        fields = ('pk', 'code', 'container', 'flavour',
+                'arrived_date', 'price', 'state')
+
+
 class QuotaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quota

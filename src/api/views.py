@@ -130,10 +130,27 @@ class ContainerViewSet(viewsets.ModelViewSet):
     queryset = Container.objects.all()
     serializer_class = serializers.ContainerSerializer
 
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        return Response({'status': response.status_code})
+
 
 class FlavourViewSet(viewsets.ModelViewSet):
     queryset = Flavour.objects.all()
     serializer_class = serializers.FlavourSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        return Response({'status': response.status_code})
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = serializers.ProductSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        return Response({'status': response.status_code})
 
 
 class QuotaViewSet(viewsets.ModelViewSet):
