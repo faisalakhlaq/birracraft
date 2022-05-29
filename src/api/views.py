@@ -148,6 +148,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = serializers.ProductSerializer
 
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        return Response({'status': response.status_code})
+
 
 class QuotaViewSet(viewsets.ModelViewSet):
     queryset = Quota.objects.all()
