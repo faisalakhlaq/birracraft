@@ -174,7 +174,7 @@ export default function Products() {
 					</Table>
 				</TableContainer>
 			</Paper>
-			<DialogNewProduct open={newModal} onClose={handleClose}/>
+			<DialogNewProduct open={newModal} onClose={handleClose} products={products} />
 		</ThemeProvider>
 	);
 }
