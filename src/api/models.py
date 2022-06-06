@@ -115,7 +115,7 @@ class Order(models.Model):
     delivery_cost = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
+    payment = models.OneToOneField(Payment, blank=True, null=True, on_delete=models.CASCADE)
     state = models.CharField(max_length=9, choices=_state)
     comment = models.TextField()
 

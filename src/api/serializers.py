@@ -79,6 +79,7 @@ class QuotaSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    payment = serializers.IntegerField(required=False)
     class Meta:
         model = Order
         fields = ('pk', 'date', 'products', 'price', 'delivery_cost',

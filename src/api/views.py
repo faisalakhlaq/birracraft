@@ -102,7 +102,6 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            print(serializer.validated_data['username'])
             user = User.objects.get(
                 username=serializer.validated_data['username']
                 )
@@ -161,3 +160,11 @@ class QuotaViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = serializers.OrderSerializer
+
+    def create(self, request, *args, **kwargs):
+        # serializer = self.get_serializer(data=self.request.data)
+        # serializer.is_valid(raise_exception=True)
+        # products = Product.objects.filter(pk__in=serializer.validated_data['products'])
+        # request.data['products'] = [p for p in products]
+        # print(request.data['products'])
+        return super().create(request, *args,**kwargs)
