@@ -28,3 +28,5 @@ RUN pip3 install -U pip && \
 FROM builder as base
 
 ENTRYPOINT ["sh", "entrypoint.sh"]
+
+FROM builder as server_celery

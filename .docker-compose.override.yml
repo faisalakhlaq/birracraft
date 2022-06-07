@@ -6,35 +6,28 @@ services:
     build:
       context: ./src
       target: builder
-    container_name: birracraft-api
     command: python manage.py runserver 0.0.0.0:8000
-    env_file:
-      - .env
     ports:
       - 8000:8000
     volumes:
       - ./src:/usr/src/birracraft
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: "always"
-    networks:
-      birracraft-net:
+
+  worker:
+    build:
+      context: ./src
+      target: server_celery
+    command: celery -A birracraft worker -l INFO
+    volumes:
+      - ./src:/usr/src/birracraft
 
   web:
     build:
       context: ./web
       dockerfile: Dockerfile
-    container_name: birracraft-web
     ports:
       - 3000:3000
     volumes:
       - ./web:/usr/src/web
-    depends_on:
-      - api
-    restart: "always"
-    networks:
-      birracraft-net:
 
   mailhog:
     image: mailhog/mailhog

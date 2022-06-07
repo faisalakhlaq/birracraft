@@ -20,6 +20,21 @@ services:
     networks:
       birracraft-net:
 
+  worker:
+    build:
+      context: ./src
+      target: server_celery
+    container_name: birracraft-worker
+    command: celery -A birracraft worker -l INFO
+    env_file:
+      - .env
+    links:
+      - api
+      - redis
+    restart: "always"
+    networks:
+      birracraft-net:
+
   nginx:
     image: nginx:1.19.0-alpine
     container_name: birracraft-nginx
@@ -58,6 +73,15 @@ services:
     networks:
       birracraft-net:
 
+  redis:
+    image: redis
+    container_name: birracraft-redis
+    ports:
+      - 6379:6379
+    restart: "always"
+    networks:
+      birracraft-net:
+
   web:
     build:
       context: ./web
@@ -67,6 +91,18 @@ services:
       - 3000
     depends_on:
       - api
+    restart: "always"
+    networks:
+      birracraft-net:
+
+  flower:
+    image: mher/flower
+    container_name: birracraft-flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/3
+      - FLOWER_PORT=8888
+    ports:
+      - 8685:8888
     restart: "always"
     networks:
       birracraft-net:
