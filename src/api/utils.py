@@ -7,6 +7,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import six
 from birracraft.celery import app
+from api.models import *
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
 from datetime import datetime
@@ -59,14 +60,23 @@ account_activation_token = TokenGenerator()
 
 
 @app.task
-def generate_report(data, orders):
+def generate_report(data):
+
+    # Get data
+
+    orders = Order.objects.filter(
+        date__gte=data['date_from']).values_list()
+    orders_list = [order for order in orders]
+
+    # Make report
+
     wb = Workbook()
     ws_orders = wb.active
     ws_orders.title = 'Orders'
 
     ws_orders.append([
         'Total_orders',
-        len(orders)
+        len(orders_list)
     ])
 
     header = [
@@ -84,12 +94,12 @@ def generate_report(data, orders):
 
     ws_orders.append(header)
 
-    for order in orders:
+    for order in orders_list:
         ws_orders.append(order)
 
     excel = save_virtual_workbook(wb)
 
-    # Setting Email
+    # Set email
 
     title = '[Birracraft] Report since {0} to {1}'.format(
                 data['date_from'],
@@ -105,7 +115,9 @@ def generate_report(data, orders):
         [data['email']]
     )
     emails.attach(
-        'Birracraft_Report_.xlsx',
+        'Birracraft_Report_{0}.xlsx'.format(
+            datetime.today().strftime('%Y-%m-%d')
+        ),
         excel,
         'application/vnd.openxmlformats-officedocument\
         .spreadsheetml.sheet'

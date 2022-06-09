@@ -171,15 +171,12 @@ class ReportViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            orders = Order.objects.filter(
-                date__gte=serializer.validated_data['date_from']).values_list()
-            orders_list = [order for order in orders]
             data = {
                 'email': request.user.email,
                 'date_from': serializer.validated_data['date_from']
                     .strftime('%Y-%m-%d')
                 }
-            utils.generate_report.delay(data, orders_list)
+            utils.generate_report.delay(data)
             return Response(
                 {'code': status.HTTP_200_OK},
                 status=status.HTTP_200_OK
