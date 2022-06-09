@@ -4,7 +4,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.shortcuts import redirect
 from django.core import serializers as s
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from api.models import *
@@ -166,3 +166,27 @@ class QuotaViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = serializers.OrderSerializer
+
+
+class ReportViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = serializers.ReportSerializer
+
+    @action(methods=('post', ), detail=False, )
+    def report(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            data = {
+                'email': request.user.email,
+                'date_from': serializer.validated_data['date_from']
+                    .strftime('%Y-%m-%d')
+                }
+            utils.generate_report.delay(data)
+            return Response(
+                {'code': status.HTTP_200_OK},
+                status=status.HTTP_200_OK
+                )
+        except Exception as e:
+            return JsonResponse(
+                data={'code': 500, 'message': str(e)}, status=500
+            )
