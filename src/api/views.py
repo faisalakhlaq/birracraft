@@ -11,6 +11,7 @@ from api.models import *
 from api import serializers, utils
 import json
 
+
 def activate_user(request, uidb64, token):
     protocol = request.scheme + '://'
     host = request.get_host().split(':')[0]
@@ -152,6 +153,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response({'status': response.status_code})
 
 
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = serializers.PaymentSerializer
+
+
 class QuotaViewSet(viewsets.ModelViewSet):
     queryset = Quota.objects.all()
     serializer_class = serializers.QuotaSerializer
@@ -160,11 +166,3 @@ class QuotaViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = serializers.OrderSerializer
-
-    def create(self, request, *args, **kwargs):
-        # serializer = self.get_serializer(data=self.request.data)
-        # serializer.is_valid(raise_exception=True)
-        # products = Product.objects.filter(pk__in=serializer.validated_data['products'])
-        # request.data['products'] = [p for p in products]
-        # print(request.data['products'])
-        return super().create(request, *args,**kwargs)

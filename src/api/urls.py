@@ -15,6 +15,7 @@ router.register(r'customer', views.CustomerViewSet, basename='customer')
 router.register(r'container', views.ContainerViewSet, basename='container')
 router.register(r'flavour', views.FlavourViewSet, basename='flavour')
 router.register(r'product', views.ProductViewSet, basename='product')
+router.register(r'payment', views.PaymentViewSet, basename='payment')
 router.register(r'quota', views.QuotaViewSet, basename='quota')
 router.register(r'order', views.OrderViewSet, basename='order')
 
