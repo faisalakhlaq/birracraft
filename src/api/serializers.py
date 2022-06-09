@@ -84,3 +84,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('pk', 'date', 'products', 'price', 'delivery_cost',
                 'total_amount', 'customer', 'payment', 'state', 'comment')
+
+
+class ReportSerializer(serializers.Serializer):
+    date_from = serializers.DateField()

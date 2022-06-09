@@ -1,3 +1,4 @@
+from posixpath import split
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -5,6 +6,10 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import six
+from birracraft.celery import app
+from openpyxl import Workbook
+from openpyxl.writer.excel import save_virtual_workbook
+from datetime import datetime
 
 
 def send_reset_pass_mail(request, user):
@@ -51,3 +56,58 @@ class TokenGenerator(PasswordResetTokenGenerator):
         )
 
 account_activation_token = TokenGenerator()
+
+
+@app.task
+def generate_report(data, orders):
+    wb = Workbook()
+    ws_orders = wb.active
+    ws_orders.title = 'Orders'
+
+    ws_orders.append([
+        'Total_orders',
+        len(orders)
+    ])
+
+    header = [
+        'id',
+        'date',
+        'products',
+        'price',
+        'delivery_cost',
+        'total_amount',
+        'customer',
+        'payment',
+        'state',
+        'comment',
+    ]
+
+    ws_orders.append(header)
+
+    for order in orders:
+        ws_orders.append(order)
+
+    excel = save_virtual_workbook(wb)
+
+    # Setting Email
+
+    title = '[Birracraft] Report since {0} to {1}'.format(
+                data['date_from'],
+                datetime.today().strftime('%Y-%m-%d'))
+
+    body = 'The results of your requested data since '
+    body += '%s is attach on this email' % data['date_from']
+
+    emails = EmailMessage(
+        title,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [data['email']]
+    )
+    emails.attach(
+        'Birracraft_Report_.xlsx',
+        excel,
+        'application/vnd.openxmlformats-officedocument\
+        .spreadsheetml.sheet'
+    )
+    emails.send()
