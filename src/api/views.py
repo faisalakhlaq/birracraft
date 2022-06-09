@@ -153,6 +153,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response({'status': response.status_code})
 
 
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = serializers.PaymentSerializer
+
+
 class QuotaViewSet(viewsets.ModelViewSet):
     queryset = Quota.objects.all()
     serializer_class = serializers.QuotaSerializer

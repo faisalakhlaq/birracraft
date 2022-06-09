@@ -72,6 +72,12 @@ class ProductSerializer(serializers.ModelSerializer):
                 'arrived_date', 'price', 'state')
 
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ('pk', 'transaction', 'amount', 'method', 'quotas')
+
+
 class QuotaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quota
