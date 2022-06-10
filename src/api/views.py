@@ -178,6 +178,7 @@ class ReportViewSet(viewsets.ReadOnlyModelViewSet):
         try:
             data = {
                 'email': request.user.email,
+                'username': request.user.username,
                 'date_from': serializer.validated_data['date_from']
                     .strftime('%Y-%m-%d')
                 }

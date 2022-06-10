@@ -63,23 +63,99 @@ account_activation_token = TokenGenerator()
 def generate_report(data):
 
     # Get data
-
     orders = Order.objects.filter(
         date__gte=data['date_from']).values_list()
     orders_list = [order for order in orders]
 
+    payments = Payment.objects.all().values_list()
+    payments_list = [pay for pay in payments]
+    quotas = Quota.objects.all().values_list()
+    quotas_list = [quota for quota in quotas]
+
+    products = Product.objects.all().values_list()
+    products_list = [product for product in products]
+
+    containers = Container.objects.all().values_list()
+    containers_list = [container for container in containers]
+    flavours = Flavour.objects.all().values_list()
+    flavours_list = [flavour for flavour in flavours]
+
     # Make report
-
     wb = Workbook()
-    ws_orders = wb.active
-    ws_orders.title = 'Orders'
+    ws = wb.active
+    ws.title = 'Totals'
 
-    ws_orders.append([
-        'Total_orders',
+    ws.append(['Totals of all resources'])
+    ws.append([])
+
+    ws.append([
+        'Entity',
+        'Quantity'
+    ])
+    ws.append([
+        'Orders',
         len(orders_list)
     ])
+    ws.append([
+        'Payments',
+        len(payments_list),
+    ])
+    ws.append([
+        'Quotas',
+        len(quotas_list),
+    ])
+    ws.append([])
+    ws.append([
+        'Products',
+        len(products_list)
+    ])
+    ws.append([
+        'Containers',
+        len(containers_list)
+    ])
+    ws.append([
+        'Flavours',
+        len(flavours_list)
+    ])
 
-    header = [
+    wb = treat_orders(wb, orders_list)
+    wb = treat_payments(wb, payments_list, quotas_list)
+    wb = treat_products(wb, products_list)
+    wb = treat_containers_flavours(wb, containers_list, flavours_list)
+
+    excel = save_virtual_workbook(wb)
+
+    # Set email
+    title = '[Birracraft] Report with data since {0} to {1}'.format(
+                data['date_from'],
+                datetime.today().strftime('%Y-%m-%d'))
+
+    msg=render_to_string('../templates/report_mail.html',{
+        'date_from': data['date_from'],
+        'username': data['username'],
+        })
+
+    email = EmailMessage(
+        subject=title,
+        body=msg,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[data['email']]
+    )
+    email.content_subtype = 'html'
+    email.attach(
+        'Birracraft_Report_{0}.xlsx'.format(
+            datetime.today().strftime('%Y-%m-%d')
+        ),
+        excel,
+        'application/vnd.openxmlformats-officedocument\
+        .spreadsheetml.sheet'
+    )
+    email.send()
+
+
+def treat_orders(wb, orders):
+    ws_orders = wb.create_sheet('Orders')
+    ws_orders.append([
         'id',
         'date',
         'products',
@@ -90,36 +166,85 @@ def generate_report(data):
         'payment',
         'state',
         'comment',
-    ]
+    ])
 
-    ws_orders.append(header)
-
-    for order in orders_list:
+    for order in orders:
         ws_orders.append(order)
 
-    excel = save_virtual_workbook(wb)
+    return wb
 
-    # Set email
 
-    title = '[Birracraft] Report since {0} to {1}'.format(
-                data['date_from'],
-                datetime.today().strftime('%Y-%m-%d'))
+def treat_payments(wb, payments, quotas):
+    ws_payments = wb.create_sheet('Payments')
 
-    body = 'The results of your requested data since '
-    body += '%s is attach on this email' % data['date_from']
+    # Payments
+    ws_payments.append([
+        'id',
+        'transaction',
+        'amount',
+        'method',
+        'quotas',
+    ])
 
-    emails = EmailMessage(
-        title,
-        body,
-        settings.DEFAULT_FROM_EMAIL,
-        [data['email']]
-    )
-    emails.attach(
-        'Birracraft_Report_{0}.xlsx'.format(
-            datetime.today().strftime('%Y-%m-%d')
-        ),
-        excel,
-        'application/vnd.openxmlformats-officedocument\
-        .spreadsheetml.sheet'
-    )
-    emails.send()
+    for pay in payments:
+        ws_payments.append(pay)
+
+    ws_payments.append([])
+
+    # Quotas
+    ws_payments.append([
+        'id',
+        'current_quota',
+        'total_quota',
+        'value',
+        'date',
+    ])
+
+    for quota in quotas:
+        ws_payments.append(quota)
+
+    return wb
+
+
+def treat_products(wb, products):
+    ws_products = wb.create_sheet('Products')
+    ws_products.append([
+        'id',
+        'code',
+        'container',
+        'flavour',
+        'arrived_date',
+        'price',
+        'state',
+    ])
+
+    for product in products:
+        ws_products.append(product)
+
+    return wb
+
+
+def treat_containers_flavours(wb, containers, flavours):
+    ws_c_f = wb.create_sheet('Containers_Flavours')
+    ws_c_f.append([
+        'id',
+        'type',
+        'liters',
+    ])
+
+    for container in containers:
+        ws_c_f.append(container)
+
+    ws_c_f.append([])
+
+    ws_c_f.append([
+        'id',
+        'name',
+        'description',
+        'price_per_lt',
+    ])
+
+    for flavour in flavours:
+        ws_c_f.append(flavour)
+
+    return wb
