@@ -1,0 +1,46 @@
+{% load static %}
+<html>
+      <head>
+        <style>
+            .topBar {
+                background-color: #264118;
+            }
+            .topBar h3 {
+                color: white;
+                font-family: Arial;
+            }
+            .topBar img {
+                border-radius: 50%;
+                width: 45px;
+                height: 45px;
+            }
+            .topBar .wrapper {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-auto-rows: auto;
+                padding: 10px;
+            }
+            .topBar .wrapper .one {
+                margin-right: 10px;
+            }
+            .topBar .wrapper .two {
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="topBar">
+            <div class="wrapper">
+                <!-- <div class="one"><img src="../resources/sativa_logo.jpeg" alt="logo"></div> -->
+                <div class="one"><img src="https://avatars.githubusercontent.com/u/21182685?v=4" alt="logo"></div>
+                <div class="two"><h3>Birracraft</h3></div>
+            </div>
+        </div>
+        <div style="max-width: 800px; margin: auto;  text-align: justify; text-justify: inter-word;">
+            <h1 style="font-family: Arial;">Hi {{ username }}!</h1>
+            <p style="font-family: Arial;">
+                The results of your requested data since {{ date_from }} is attach on this email.
+            <p>
+        </div>
+    </body>
+</html>

@@ -67,7 +67,7 @@ class Product(models.Model):
         max_length=5, help_text='Code graven in Kegs')
     container = models.ForeignKey(Container, on_delete=models.CASCADE)
     flavour = models.ForeignKey(Flavour, on_delete=models.CASCADE)
-    arrived_date = models.DateTimeField()
+    arrived_date = models.DateField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.CharField(max_length=10, choices=_state)
 

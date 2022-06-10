@@ -132,6 +132,10 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = '/static/'
 
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+
 # SMTP configuration
 
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')

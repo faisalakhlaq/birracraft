@@ -120,6 +120,13 @@ const TopBar = () => {
                     Customers
                 </Button>
               </Link>
+              <Link to="/Report" style={{ textDecoration: 'none' }}>
+                <Button onClick={handleCloseNavMenu}
+                        sx={{ my: 2, color: 'white', display: 'block',
+                        '&:hover': { color: 'black', background: 'white'} }}>
+                  Report
+                </Button>
+              </Link>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
                   <Avatar sx={{ bgcolor: 'white' }}>
