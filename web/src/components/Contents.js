@@ -19,6 +19,7 @@ import Payments from './Payments.js';
 import Products from './Products.js';
 import ContainersFlavours from './ContainersFlavours.js';
 import Customers from './Customers.js';
+import Report from './Report.js';
 import Profile from './Profile.js';
 
 
@@ -43,6 +44,7 @@ const Contents = () => (
 					<Route exact path="/Products" element={<Products />} />
           <Route exact path="/ContainersFlavours" element={<ContainersFlavours />} />
 					<Route exact path="/Customers" element={<Customers />} />
+          <Route exact path="/Report" element={<Report />} />
 					<Route exact path="/Profile" element={<Profile />} />
 				</Route>
     </Routes>
