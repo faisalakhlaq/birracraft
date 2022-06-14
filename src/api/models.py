@@ -110,7 +110,7 @@ class Order(models.Model):
         ('Paid', 'Paid'),
     ]
     date = models.DateField()
-    products = models.ForeignKey(Product, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     delivery_cost = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)

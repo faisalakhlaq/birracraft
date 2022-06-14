@@ -158,7 +158,6 @@ def treat_orders(wb, orders):
     ws_orders.append([
         'id',
         'date',
-        'products',
         'price',
         'delivery_cost',
         'total_amount',

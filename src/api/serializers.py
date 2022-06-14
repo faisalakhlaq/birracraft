@@ -62,8 +62,6 @@ class ProductSerializer(serializers.ModelSerializer):
             % (container_data.type, container_data.liters)
         representation['flavour'] = Flavour.objects.get(
             pk=representation['flavour']).name
-        representation['arrived_date'] = representation['arrived_date'] \
-            .split('T')[0]
         return representation
 
     class Meta:
@@ -86,6 +84,18 @@ class QuotaSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     payment = serializers.IntegerField(required=False)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['products'] = [
+            p.code for p in Product.objects.filter(
+                pk__in=representation['products']
+            )
+        ]
+        representation['customer'] = Customer.objects.get(
+            pk=representation['customer']).name
+        return representation
+
     class Meta:
         model = Order
         fields = ('pk', 'date', 'products', 'price', 'delivery_cost',

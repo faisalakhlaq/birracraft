@@ -39,6 +39,7 @@ export default function DialogNewOrder(props) {
 	const [customers, setCustomers] = React.useState([]);
 	const [state, setState] = React.useState('');
 	const [productSelected, setProductSelected] = React.useState([]);
+	const [price, setPrice] = React.useState(0);
 
 	const navigate = useNavigate();
 
@@ -56,32 +57,36 @@ export default function DialogNewOrder(props) {
   const handleSubmit = async (event) => {
 		event.preventDefault();
     const data = new FormData(event.currentTarget);
+
 		const productPKs = [];
-		const pvar = products.filter(p => productSelected.includes(p.code));
-		console.log(pvar);
-		products.filter(p => productSelected.includes(p.code))
-			.forEach(p => productPKs.push(p));
-    // return await API_DATA_CALL(
-		// 	'POST',
-		// 	'/order/',
-		// 	{
-		// 		'date': data.get('date'),
-		// 		'products': productPKs,
-		// 		'price': data.get('price'),
-		// 		'delivery_cost': data.get('delivery_cost'),
-		// 		'total_amount': data.get('total_amount'),
-		// 		'customer': data.get('customer'),
-		// 		'state': data.get('state'),
-		// 		'comment': data.get('comment'),
-		// 	}
-		// ).then(response => {
-		// 	console.log(response);
-    //   if (response.pk){
-		// 		window.location.reload();
-    //   } else {
-		// 		navigate('/RegistrationFail');
-    //   }
-    // });
+		products.map(p => {
+				if (productSelected.includes(p.code)){
+					productPKs.push(p.pk);
+				}
+			}
+		);
+
+    return await API_DATA_CALL(
+			'POST',
+			'/order/',
+			{
+				'date': data.get('date'),
+				'products': productPKs,
+				'price': data.get('price'),
+				'delivery_cost': data.get('delivery_cost'),
+				'total_amount': data.get('total_amount'),
+				'customer': data.get('customer'),
+				'state': data.get('state'),
+				'comment': data.get('comment'),
+			}
+		).then(response => {
+			console.log(response);
+      if (response.pk){
+				window.location.reload();
+      } else {
+				navigate('/RegistrationFail');
+      }
+    });
   };
 	
 	React.useEffect(async () => {
@@ -100,6 +105,15 @@ export default function DialogNewOrder(props) {
 	}, []);
 
 
+	React.useEffect(async () => {
+		productSelected.map(ps => {
+			setPrice(prev =>
+				parseFloat(prev) +
+				parseFloat(products.find(p => p.code == ps).price)
+			);
+		});
+	}, [productSelected]);
+
 	return (
     <Dialog
       open={props.open}
@@ -107,29 +121,12 @@ export default function DialogNewOrder(props) {
 			TransitionComponent={Transition}
     >
 			<Box component="form" noValidate onSubmit={handleSubmit}>
-				<DialogTitle>Create New Product</DialogTitle>
+				<DialogTitle>Create New Order</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Add a new product.
+						Generate a new order.
 					</DialogContentText>
 					<Grid container>
-						{/* <FormControl fullWidth sx={{ m: 1 }}>
-							<InputLabel>Products</InputLabel>
-							<Select
-								id="product"
-								name="product"
-								defaultValue=""
-								label="Product"
-								variant="standard"
-							>
-								{products
-									?.map((option) => (
-										<MenuItem key={option.pk}
-											value={option.pk}>{option.code} - {option.container} - {option.flavour}</MenuItem>
-								))}
-							</Select>
-						</FormControl> */}
-
 						<FormControl fullWidth sx={{ m: 2 }}>
 							<InputLabel>Product</InputLabel>
 							<Select multiple
@@ -145,7 +142,6 @@ export default function DialogNewOrder(props) {
 										))}
 									</Box>
 								)}
-								
 							>
 								{products.map((option) => (
 									<MenuItem
@@ -157,8 +153,6 @@ export default function DialogNewOrder(props) {
 								))}
 							</Select>
 						</FormControl>
-
-
 						<FormControl fullWidth sx={{ m: 2 }}>
 							<InputLabel>Customers</InputLabel>
 							<Select
@@ -183,6 +177,7 @@ export default function DialogNewOrder(props) {
 							name="price"
 							label="Price"
 							type="decimal"
+							value={price}
 							variant="standard"
 							sx={{ m: 2, width: "25%" }}
 						/>
