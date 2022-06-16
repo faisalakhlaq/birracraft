@@ -138,7 +138,9 @@ export default function Orders() {
 								.map((row) => (
 								<TableRow key={row.pk}>
 									<TableCell>{row.date}</TableCell>
-									<TableCell>{row.products}</TableCell>
+									<TableCell>{row.products.map(
+											p => p+', '
+									)}</TableCell>
 									<TableCell>{row.price}</TableCell>
 									<TableCell>{row.delivery_cost}</TableCell>
 									<TableCell>{row.total_amount}</TableCell>

@@ -15,6 +15,7 @@ import Slide from '@mui/material/Slide';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import { API_DATA_CALL } from '../../utils/api';
+import { FormHelperText } from '@mui/material';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -67,7 +68,7 @@ export default function DialogEditCustomer(props) {
 			TransitionComponent={Transition}
     >
 			<Box component="form" noValidate onSubmit={handleSubmit}>
-				<DialogTitle>Create New Customer</DialogTitle>
+				<DialogTitle>Edit selected customer</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
 						Edit client data.
@@ -80,10 +81,10 @@ export default function DialogEditCustomer(props) {
 								margin="dense"
 								id="name"
 								name="name"
-								label="Name"
+								label={data.name}
 								type="text"
 								variant="standard"
-								value={data.name}
+								helperText="Name"
 							/>
 						</Grid>
 						<Grid item sx={{ ml: 5 }}>
@@ -91,10 +92,10 @@ export default function DialogEditCustomer(props) {
 								margin="dense"
 								id="email"
 								name="email"
-								label="Email Address"
+								label={data.email}
 								type="email"
 								variant="standard"
-								value={data.email}
+								helperText="Email Address"
 							/>
 						</Grid>
 						<Grid item sx={{ ml: 5 }}>
@@ -102,10 +103,10 @@ export default function DialogEditCustomer(props) {
 								margin="dense"
 								id="phone"
 								name="phone"
-								label="Phone Number"
+								label={data.cellphone}
 								type="text"
 								variant="standard"
-								value={data.cellphone}
+								helperText="Phone Number"
 							/>
 						</Grid>
 						<Grid item sx={{ ml: 5 }}>
@@ -113,21 +114,22 @@ export default function DialogEditCustomer(props) {
 								margin="dense"
 								id="address"
 								name="address"
-								label="Address"
+								label={data.address}
 								type="text"
 								variant="standard"
-								value={data.address}
+								helperText="Address"
 							/>
 						</Grid>
 					</Grid>
 					<Grid container justifyContent="center">
 						<FormControl sx={{ width: "80%", mt: 3 }}>
-							<InputLabel>Type</InputLabel>
-							<Select id="type" name="type" label="Type" variant="standard" 
+							<InputLabel>{data.type}</InputLabel>
+							<Select id="type" name="type" variant="standard"
 								value={type} onChange={(e) => {setType(e.target.value);}}>
 								<MenuItem value="Particular">Particular</MenuItem>
 								<MenuItem value="Comerce">Comerce</MenuItem>
 							</Select>
+							<FormHelperText>Type</FormHelperText>
 						</FormControl>
 					</Grid>
 				</DialogContent>
