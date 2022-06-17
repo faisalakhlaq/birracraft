@@ -16,12 +16,13 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#264118',
-      },
+  palette: {
+    primary: {
+      main: '#264118',
     },
-  });
+  },
+});
+
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ export default function SignUp() {
       }
     });
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,8 +66,7 @@ export default function SignUp() {
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
+                <TextField autoComplete="given-name"
                   name="firstName"
                   required
                   fullWidth
@@ -75,8 +76,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
+                <TextField required
                   fullWidth
                   id="lastName"
                   label="Last Name"
@@ -85,8 +85,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
+                <TextField required
                   fullWidth
                   id="email"
                   label="Email Address"
@@ -95,8 +94,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
+                <TextField required
                   fullWidth
                   id="username"
                   label="Username"
@@ -105,8 +103,7 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
+                <TextField required
                   fullWidth
                   name="password"
                   label="Password"
@@ -116,8 +113,7 @@ export default function SignUp() {
                 />
               </Grid>
             </Grid>
-            <Button
-              type="submit"
+            <Button type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
@@ -126,10 +122,12 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to="/SignIn" style={{
+                <Link to="/SignIn"
+                  style={{
                     color: 'inherit',
                     textDecoration: 'inherit',
-                    }}>
+                  }}
+                >
                   Already have an account? Sign in
                 </Link>
               </Grid>

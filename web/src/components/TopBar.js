@@ -13,9 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
-
 import { Link, useNavigate } from 'react-router-dom';
-
 import sativa_logo from '../resources/sativa_logo.png';
 
 
@@ -30,6 +28,7 @@ const TopBar = () => {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -64,6 +63,7 @@ const TopBar = () => {
 
   const auth = window.localStorage.getItem('authTokens');
 
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="absolute">
@@ -73,57 +73,99 @@ const TopBar = () => {
               <Avatar src={sativa_logo} sx={{ mr: 2 }} />
             </Link>
             {!auth && (
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              <Link to="/SignIn" style={{ textDecoration: 'none' }}>
-                <Button onClick={(handleCloseNavMenu)}
-                        sx={{ my: 2, color: 'white', display: 'block',
-                        '&:hover': { color: 'black', background: 'white'} }}>
-                  Sign In
-                </Button>
-              </Link>
-              <Link to="/SignUp" style={{ textDecoration: 'none' }}>
-                <Button onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block',
-                        '&:hover': { color: 'black', background: 'white'} }}>
-                  Register
-                </Button>
-              </Link>
-            </Box>
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Link to="/SignIn" style={{ textDecoration: 'none' }}>
+                  <Button onClick={(handleCloseNavMenu)}
+                    sx={{
+                      my: 2,
+                      color: 'white',
+                      display: 'block',
+                      '&:hover': { color: 'black', background: 'white'} 
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/SignUp"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Button onClick={handleCloseNavMenu}
+                    sx={{
+                      my: 2,
+                      color: 'white',
+                      display: 'block',
+                      '&:hover': { color: 'black', background: 'white'}
+                    }}
+                  >
+                    Register
+                  </Button>
+                </Link>
+              </Box>
             )}
             {auth && (
-            <Box ml={'auto'} sx={{ flexGrow: 0, display: { md: 'flex' } }}>
+            <Box ml={'auto'}
+              sx={{
+                flexGrow: 0,
+                display: { md: 'flex' }
+              }}
+            >
               <Link to="/Orders" style={{ textDecoration: 'none' }}>
                 <Button onClick={(handleCloseNavMenu)}
-                        sx={{ my: 2, color: 'white', display: 'block',
-                        '&:hover': { color: 'black', background: 'white'} }}>
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    '&:hover': { color: 'black', background: 'white'}
+                  }}
+                >
                   Orders
                 </Button>
               </Link>
               <Link to="/Payments" style={{ textDecoration: 'none' }}>
                 <Button onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block',
-                        '&:hover': { color: 'black', background: 'white'} }}>
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    '&:hover': { color: 'black', background: 'white'}
+                  }}
+                >
                   Payments
                 </Button>
               </Link>
               <Link to="/Products" style={{ textDecoration: 'none' }}>
                 <Button onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block',
-                        '&:hover': { color: 'black', background: 'white'} }}>
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    '&:hover': { color: 'black', background: 'white'}
+                  }}
+                >
                   Products
                 </Button>
               </Link>
               <Link to="/Customers" style={{ textDecoration: 'none' }}>
                 <Button onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block',
-                        '&:hover': { color: 'black', background: 'white'} }}>
-                    Customers
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    '&:hover': { color: 'black', background: 'white'}
+                  }}
+                >
+                  Customers
                 </Button>
               </Link>
               <Link to="/Report" style={{ textDecoration: 'none' }}>
                 <Button onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block',
-                        '&:hover': { color: 'black', background: 'white'} }}>
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    '&:hover': { color: 'black', background: 'white'}
+                  }}
+                >
                   Report
                 </Button>
               </Link>
@@ -134,8 +176,7 @@ const TopBar = () => {
                   </Avatar>
                 </IconButton>
               </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
+              <Menu sx={{ mt: '45px' }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -154,8 +195,9 @@ const TopBar = () => {
                   <MenuItem key={setting}
                     onClick={() => handleAction(setting)}
                     sx={{
-                    '&:hover': { color: 'white', background: '#264118'}
-                  }}>
+                      '&:hover': { color: 'white', background: '#264118'}
+                    }}
+                  >
                     <Typography textAlign="center" >{setting}</Typography>
                   </MenuItem>
                 ))}

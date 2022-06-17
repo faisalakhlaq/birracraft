@@ -75,38 +75,38 @@ const footers = [
 ];
 
 const theme = createTheme({
-	palette: {
-		primary: {
-			main: '#264118',
-		},
-	},
+  palette: {
+    primary: {
+      main: '#264118',
+    },
+  },
 });
 
 
 const Home = () => {
   return (
-		<ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
       <CssBaseline />
-			<Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="primary"
-          gutterBottom
-        >
-          Welcome to Birracraft
-        </Typography>
-        <Typography variant="h5" align="center" color="text.primary" sx={{ ml: 2, mr: 2 }}>
-					We are pasionated for this drink and that&apos;s why we work hard, with pasion,
-					dedication & engeneering to the detail to make the best craft beer,
-					with the best products that we can find.
-					Our aim is prioritize the quality and do it with love.
-					We invite you to taste it!
-        </Typography>
+      <Typography
+        component="h1"
+        variant="h2"
+        align="center"
+        color="primary"
+        gutterBottom
+      >
+        Welcome to Birracraft
+      </Typography>
+      <Typography variant="h5" align="center" color="text.primary" sx={{ ml: 2, mr: 2 }}>
+        We are pasionated for this drink and that&apos;s why we work hard, with pasion,
+        dedication & engeneering to the detail to make the best craft beer,
+        with the best products that we can find.
+        Our aim is prioritize the quality and do it with love.
+        We invite you to taste it!
+      </Typography>
       <Container disableGutters maxWidth="sm"
-				sx={{pt: 8, pb: 6 , mt: 2, mb: 2, height: '320px',
-					backgroundImage: `url(${sativa_banner})` }} />
+        sx={{ pt: 8, pb: 6 , mt: 2, mb: 2, height: '320px',
+        backgroundImage: `url(${sativa_banner})` }} />
       <Container
         maxWidth="md"
         component="footer"

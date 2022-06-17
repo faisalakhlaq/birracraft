@@ -1,7 +1,7 @@
 import React from "react";
 
 function Payments(){
-    return (<div>pays div</div>);
+    return (<div>Under Construction</div>);
 }
 
 export default Payments;
