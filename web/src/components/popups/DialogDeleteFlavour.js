@@ -10,40 +10,40 @@ import { API_DATA_CALL } from '../../utils/api';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 
 export default function DialogDeleteFlavour(props) {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event, pk) => {
-		event.preventDefault();
+    event.preventDefault();
     const response = await API_DATA_CALL(
-			'DELETE',
-			`/flavour/${pk}/`,
-			{
-				'id': `${pk}`,
-			}
-		);
-		if (response.status === 204){
-			window.location.reload();
-		} else {
-			navigate('/RegistrationFail');
-		};
+      'DELETE',
+      `/flavour/${pk}/`,
+      {
+        'id': `${pk}`,
+      }
+    );
+    if (response.status === 204){
+      window.location.reload();
+    } else {
+      navigate('/RegistrationFail');
+    };
   };
 
-	return (
-    <Dialog
-      open={props.open}
+  return (
+    <Dialog open={props.open}
       onClose={props.onClose}
-			TransitionComponent={Transition}
+      TransitionComponent={Transition}
     >
-			<Box component="form" noValidate onSubmit={(e) => handleSubmit(e, props.row)}>
-				<DialogTitle>Are you sure to delete this Flavour?</DialogTitle>
-				<DialogActions>
-					<Button type="submit" variant="contained">Delete</Button>
-				</DialogActions>
-			</Box>
+      <Box component="form" noValidate onSubmit={(e) => handleSubmit(e, props.row)}>
+        <DialogTitle>Are you sure to delete this Flavour?</DialogTitle>
+        <DialogActions>
+          <Button type="submit" variant="contained">Delete</Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 }

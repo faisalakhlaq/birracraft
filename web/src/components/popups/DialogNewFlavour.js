@@ -18,84 +18,80 @@ import { API_DATA_CALL } from '../../utils/api';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function DialogNewFlavour(props) {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
-		event.preventDefault();
+    event.preventDefault();
     const data = new FormData(event.currentTarget);
     return await API_DATA_CALL(
-			'POST',
-			'/flavour/',
-			{
-				'name': data.get('name'),
-				'description': data.get('description'),
-				'price_per_lt': data.get('price_per_lt'),
-			}
-		).then(response => {
+      'POST',
+      '/flavour/',
+      {
+        'name': data.get('name'),
+        'description': data.get('description'),
+        'price_per_lt': data.get('price_per_lt'),
+      }
+    ).then(response => {
       if (response.pk){
-				window.location.reload();
+        window.location.reload();
       } else {
-				navigate('/RegistrationFail');
+        navigate('/RegistrationFail');
       }
     });
   };
 
 
-	return (
-    <Dialog
-      open={props.open}
+  return (
+    <Dialog open={props.open}
       onClose={props.onClose}
-			TransitionComponent={Transition}
+      TransitionComponent={Transition}
     >
-			<Box component="form" noValidate onSubmit={handleSubmit}>
-				<DialogTitle>Create New Flavour</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						Add a new flavour to assign to a product.
-					</DialogContentText>
-					<Grid container>
-						<Grid item sx={{ ml: 5 }}>
-							<TextField
-								margin="dense"
-								id="name"
-								name="name"
-								label="Name"
-								type="text"
-								variant="standard"
-							/>
-						</Grid>
-						<Grid item sx={{ ml: 5 }}>
-							<TextField
-								margin="dense"
-								id="price_per_lt"
-								name="price_per_lt"
-								label="Price per liter"
-								type="decimal"
-								variant="standard"
-							/>
-						</Grid>
-					</Grid>
-					<Grid container justifyContent="center">
-						<Grid item sx={{ ml: 5 }}>
-								<TextField
-									margin="dense"
-									id="description"
-									name="description"
-									label="Description"
-									type="text"
-									variant="standard"
-								/>
-							</Grid>
-					</Grid>
-				</DialogContent>
-				<DialogActions>
-					<Button type="submit">Save</Button>
-				</DialogActions>
-			</Box>
+      <Box component="form" noValidate onSubmit={handleSubmit}>
+        <DialogTitle>Create New Flavour</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Add a new flavour to assign to a product.
+          </DialogContentText>
+          <Grid container>
+            <Grid item sx={{ ml: 5 }}>
+              <TextField margin="dense"
+                id="name"
+                name="name"
+                label="Name"
+                type="text"
+                variant="standard"
+              />
+            </Grid>
+            <Grid item sx={{ ml: 5 }}>
+              <TextField margin="dense"
+                id="price_per_lt"
+                name="price_per_lt"
+                label="Price per liter"
+                type="decimal"
+                variant="standard"
+              />
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Grid item sx={{ ml: 5 }}>
+              <TextField margin="dense"
+                id="description"
+                name="description"
+                label="Description"
+                type="text"
+                variant="standard"
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button type="submit">Save</Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 }
