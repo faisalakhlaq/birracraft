@@ -17,17 +17,14 @@ const style = {
 };
 
 export default function ModalPopUp(props) {
-
-	return (
+  return (
     <div>
-      <Modal
-        open={props.open}
+      <Modal open={props.open}
         onClose={props.onClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-				
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {props.title}
           </Typography>

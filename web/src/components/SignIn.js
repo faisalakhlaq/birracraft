@@ -16,12 +16,13 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#264118',
-      },
+  palette: {
+    primary: {
+      main: '#264118',
     },
-  });
+  },
+});
+
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -47,8 +48,7 @@ export default function SignIn() {
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '80vh' }}>
         <CssBaseline />
-        <Grid
-          item
+        <Grid item
           xs={false}
           sm={4}
           md={7}
@@ -76,8 +76,7 @@ export default function SignIn() {
               Sign in
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
+              <TextField margin="normal"
                 required
                 fullWidth
                 id="username"
@@ -86,8 +85,7 @@ export default function SignIn() {
                 autoComplete="username"
                 autoFocus
               />
-              <TextField
-                margin="normal"
+              <TextField margin="normal"
                 required
                 fullWidth
                 name="password"
@@ -96,8 +94,7 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
               />
-              <Button
-                type="submit"
+              <Button type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
@@ -106,18 +103,22 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link to="/ResetPass" style={{
-                    color: 'inherit',
-                    textDecoration: 'inherit',
-                    }}>
+                  <Link to="/ResetPass"
+                    style={{
+                      color: 'inherit',
+                      textDecoration: 'inherit',
+                    }}
+                  >
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item xs>
-                  <Link to="/SignUp" style={{
-                    color: 'inherit',
-                    textDecoration: 'inherit',
-                    }}>
+                  <Link to="/SignUp"
+                    style={{
+                      color: 'inherit',
+                      textDecoration: 'inherit',
+                    }}
+                  >
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -126,12 +127,13 @@ export default function SignIn() {
           </Box>
         </Grid>
       </Grid>
-      <ModalPopUp open={modal} onClose={handleClose}
+      <ModalPopUp open={modal}
+        onClose={handleClose}
         title={'User/Password incorrect'}
         body={
           'The input data is incorrect. Check that the credentials used'
         }
-        />
+      />
     </ThemeProvider>
   );
 }
