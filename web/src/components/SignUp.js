@@ -11,8 +11,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { API_NOAUTH_CALL } from '../utils/api.js';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_NOAUTH_CALL } from '../utils/api.js';
 
 
 const theme = createTheme({
