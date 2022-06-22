@@ -9,10 +9,10 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import sativa_banner from '../resources/sativa_banner2.jpg';
-import ModalPopUp from './popups/ModalPopUp';
-import { API_AUTH_CALL } from '../utils/api';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_AUTH_CALL } from '../utils/api';
+import ModalPopUp from './popups/ModalPopUp';
+import sativa_banner from '../resources/sativa_banner2.jpg';
 
 
 const theme = createTheme({

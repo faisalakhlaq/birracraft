@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -17,7 +16,7 @@ import DialogNewCustomer from './popups/DialogNewCustomer';
 import DialogEditCustomer from './popups/DialogEditCustomer';
 import DialogDeleteCustomer from './popups/DialogDeleteCustomer';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { API_DATA_CALL } from '../utils/api.js';
 
 

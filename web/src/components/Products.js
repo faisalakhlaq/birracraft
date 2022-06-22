@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -12,12 +11,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DialogNewProduct from './popups/DialogNewProduct';
 import DialogDeleteProduct from './popups/DialogDeleteProduct';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { API_DATA_CALL } from '../utils/api.js';
 import { useNavigate } from 'react-router-dom';
 
