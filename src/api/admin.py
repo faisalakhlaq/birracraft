@@ -30,16 +30,16 @@ class ProductAdmin(admin.ModelAdmin):
         )
 
 
-@admin.register(Quota)
-class QuotaAdmin(admin.ModelAdmin):
-    list_display = ('current_quota', 'total_quota', 'value', 'date')
-
-
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_filters = ('method')
-    list_display = ('transaction', 'amount', 'quotas', 'method')
+    list_display = ('transaction', 'amount', 'method')
     search_field = ('transaccton', 'amount')
+
+
+@admin.register(Quota)
+class QuotaAdmin(admin.ModelAdmin):
+    list_display = ('current_quota', 'total_quota', 'value', 'date')
 
 
 @admin.register(Order)

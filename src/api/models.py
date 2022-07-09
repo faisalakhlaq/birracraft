@@ -75,16 +75,6 @@ class Product(models.Model):
         return '%s - %s' % (self.container, self.flavour)
 
 
-class Quota(models.Model):
-    current_quota = models.IntegerField()
-    total_quota = models.IntegerField()
-    value = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
-
-    def __str__(self):
-        return '%s/%s' % (self.current_quota, self.total_quota)
-
-
 class Payment(models.Model):
     _method = [
         ('Debit Card', 'Debit Card'),
@@ -94,13 +84,32 @@ class Payment(models.Model):
         ('Digital Wallet', 'Digital Wallet'),
         ('Cryptocurrency', 'Cryptocurrency'),
     ]
-    transaction = models.IntegerField()
+    transaction = models.IntegerField(default=1)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     method = models.CharField(max_length=14, choices=_method)
-    quotas = models.ForeignKey(Quota, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            last_transaction = self.objects.all().aggregate(
+                largest=models.Max('transaction')
+                )['largest']
+            if last_transaction is not None:
+                self.transaction = last_transaction + 1
+        return super(Payment, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.transaction
+
+
+class Quota(models.Model):
+    current_quota = models.IntegerField()
+    total_quota = models.IntegerField()
+    value = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s/%s' % (self.current_quota, self.total_quota)
 
 
 class Order(models.Model):
