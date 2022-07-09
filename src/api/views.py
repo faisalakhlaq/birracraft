@@ -153,6 +153,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response({'status': response.status_code})
 
 
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = serializers.OrderSerializer
+
+
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = serializers.PaymentSerializer
@@ -161,11 +166,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
 class QuotaViewSet(viewsets.ModelViewSet):
     queryset = Quota.objects.all()
     serializer_class = serializers.QuotaSerializer
-
-
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = serializers.OrderSerializer
 
 
 class ReportViewSet(viewsets.ReadOnlyModelViewSet):

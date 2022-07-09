@@ -30,18 +30,6 @@ class ProductAdmin(admin.ModelAdmin):
         )
 
 
-@admin.register(Payment)
-class PaymentAdmin(admin.ModelAdmin):
-    list_filters = ('method')
-    list_display = ('transaction', 'amount', 'method')
-    search_field = ('transaccton', 'amount')
-
-
-@admin.register(Quota)
-class QuotaAdmin(admin.ModelAdmin):
-    list_display = ('current_quota', 'total_quota', 'value', 'date')
-
-
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_filters = ('state')
@@ -49,3 +37,15 @@ class OrderAdmin(admin.ModelAdmin):
         'date', 'price', 'delivery_cost', 'total_amount', 'customer', 'state'
         )
     search_field = ('customer__name')
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_filters = ('method')
+    list_display = ('transaction', 'amount', 'method', 'order')
+    search_field = ('transaccton', 'amount')
+
+
+@admin.register(Quota)
+class QuotaAdmin(admin.ModelAdmin):
+    list_display = ('current_quota', 'total_quota', 'value', 'date', 'payment')

@@ -75,6 +75,25 @@ class Product(models.Model):
         return '%s - %s' % (self.container, self.flavour)
 
 
+class Order(models.Model):
+    _state = [
+        ('Pending', 'Pending'),
+        ('In Quotas', 'In Quotas'),
+        ('Paid', 'Paid'),
+    ]
+    date = models.DateField()
+    products = models.ManyToManyField(Product)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    delivery_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    state = models.CharField(max_length=9, choices=_state)
+    comment = models.TextField()
+
+    def __str__(self):
+        return '%s - %s' % (self.date, self.customer)
+
+
 class Payment(models.Model):
     _method = [
         ('Debit Card', 'Debit Card'),
@@ -87,10 +106,11 @@ class Payment(models.Model):
     transaction = models.IntegerField(default=1)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     method = models.CharField(max_length=14, choices=_method)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            last_transaction = self.objects.all().aggregate(
+            last_transaction = Payment.objects.all().aggregate(
                 largest=models.Max('transaction')
                 )['largest']
             if last_transaction is not None:
@@ -110,23 +130,3 @@ class Quota(models.Model):
 
     def __str__(self):
         return '%s/%s' % (self.current_quota, self.total_quota)
-
-
-class Order(models.Model):
-    _state = [
-        ('Pending', 'Pending'),
-        ('In Quotas', 'In Quotas'),
-        ('Paid', 'Paid'),
-    ]
-    date = models.DateField()
-    products = models.ManyToManyField(Product)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    delivery_cost = models.DecimalField(max_digits=10, decimal_places=2)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    payment = models.OneToOneField(Payment, blank=True, null=True, on_delete=models.CASCADE)
-    state = models.CharField(max_length=9, choices=_state)
-    comment = models.TextField()
-
-    def __str__(self):
-        return '%s - %s' % (self.date, self.customer)
