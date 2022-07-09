@@ -39,6 +39,7 @@ export default function DialogNewOrder(props) {
   const [state, setState] = React.useState('');
   const [productSelected, setProductSelected] = React.useState([]);
   const [price, setPrice] = React.useState(0);
+  const [totalAmount, setTotalAmount] = React.useState(0);
 
   const navigate = useNavigate();
 
@@ -59,7 +60,7 @@ export default function DialogNewOrder(props) {
 
     const productPKs = [];
     products.map(p => {
-      if (productSelected.includes(p.code)){
+      if (productSelected.includes(p.code)) {
         productPKs.push(p.pk);
       }
     });
@@ -71,22 +72,21 @@ export default function DialogNewOrder(props) {
         'date': data.get('date'),
         'products': productPKs,
         'price': data.get('price'),
-        'delivery_cost': data.get('delivery_cost'),
-        'total_amount': data.get('total_amount'),
+        'delivery_cost': data.get('deliveryCost'),
+        'total_amount': data.get('totalAmount'),
         'customer': data.get('customer'),
         'state': data.get('state'),
         'comment': data.get('comment'),
       }
-      ).then(response => {
-        console.log(response);
-      if (response.pk){
+    ).then(response => {
+      if (response.pk) {
         window.location.reload();
       } else {
         navigate('/RegistrationFail');
       }
     });
   };
-    
+
   React.useEffect(async () => {
     const productsList = await API_DATA_CALL(
       'GET',
@@ -105,11 +105,14 @@ export default function DialogNewOrder(props) {
 
 
   React.useEffect(async () => {
+    const priceSum = [];
     productSelected.map(ps => {
-      setPrice(prev =>
-        parseFloat(prev) +
+      priceSum.push(
         parseFloat(products.find(p => p.code == ps).price)
       );
+      setPrice(priceSum.reduce(
+        (previousValue, currentValue) => previousValue + currentValue, 0
+      ));
     });
   }, [productSelected]);
 
@@ -128,28 +131,28 @@ export default function DialogNewOrder(props) {
           <Grid container>
             <FormControl fullWidth sx={{ m: 2 }}>
               <InputLabel>Product</InputLabel>
-                <Select multiple
-                  id="product"
-                  name="product"
-                  value={productSelected}
-                  onChange={handleChange}
-                  variant="standard"
-                  renderValue={(selected) => (
-                    <Box>
-                      {selected.map((value) => (
-                        <Chip key={value} label={value} />
-                      ))}
-                    </Box>
-                  )}
-                >
-                  {products.map((option) => (
-                    <MenuItem key={option.pk}
-                      value={option.code}
-                    >
-                      {option.code} ({option.container} {option.flavour})
-                    </MenuItem>
-                  ))}
-                </Select>
+              <Select multiple
+                id="product"
+                name="product"
+                value={productSelected}
+                onChange={handleChange}
+                variant="standard"
+                renderValue={(selected) => (
+                  <Box>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}
+              >
+                {products.map((option) => (
+                  <MenuItem key={option.pk}
+                    value={option.code}
+                  >
+                    {option.code} ({option.container} {option.flavour})
+                  </MenuItem>
+                ))}
+              </Select>
             </FormControl>
             <FormControl fullWidth sx={{ m: 2 }}>
               <InputLabel>Customers</InputLabel>
@@ -181,18 +184,22 @@ export default function DialogNewOrder(props) {
               sx={{ m: 2, width: "25%" }}
             />
             <TextField margin="dense"
-              id="delivery_cost"
-              name="delivery_cost"
+              id="deliveryCost"
+              name="deliveryCost"
               label="Delivery Cost"
               type="decimal"
+              onChange={(e) => {setTotalAmount(
+                price + parseFloat(e.target.value)
+              );}}
               variant="standard"
               sx={{ m: 2, width: "25%" }}
             />
             <TextField margin="dense"
-              id="total_amount"
-              name="total_amount"
+              id="totalAmount"
+              name="totalAmount"
               label="Total Amount"
               type="decimal"
+              value={totalAmount}
               variant="standard"
               sx={{ m: 2, width: "25%" }}
             />
@@ -203,7 +210,7 @@ export default function DialogNewOrder(props) {
               name="date"
               label="Date"
               type="date"
-              InputLabelProps={{ shrink: true}}
+              InputLabelProps={{ shrink: true }}
               variant="standard"
               sx={{ m: 2 }}
             />
@@ -212,9 +219,9 @@ export default function DialogNewOrder(props) {
               <Select id="state"
                 name="state"
                 label="State"
-                variant="standard" 
+                variant="standard"
                 value={state}
-                onChange={(e) => {setState(e.target.value);}}
+                onChange={(e) => { setState(e.target.value); }}
               >
                 <MenuItem value="Pending">Pending</MenuItem>
                 <MenuItem value="Paid">Paid</MenuItem>
@@ -229,7 +236,7 @@ export default function DialogNewOrder(props) {
               name="comment"
               label="Comment"
               type="text"
-              InputLabelProps={{ shrink: true}}
+              InputLabelProps={{ shrink: true }}
               variant="standard"
               sx={{ m: 2 }}
             />
