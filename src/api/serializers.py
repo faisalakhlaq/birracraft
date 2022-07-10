@@ -102,5 +102,9 @@ class QuotaSerializer(serializers.ModelSerializer):
                 'value', 'date', 'payment')
 
 
+class QuotasByPaymentSerializer(serializers.Serializer):
+    payment = serializers.IntegerField()
+
+
 class ReportSerializer(serializers.Serializer):
     date_from = serializers.DateField()
