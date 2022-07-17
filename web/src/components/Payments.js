@@ -12,9 +12,15 @@ import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import DialogNewCustomer from './popups/DialogNewCustomer';
-import DialogEditCustomer from './popups/DialogEditCustomer';
-import DialogDeleteCustomer from './popups/DialogDeleteCustomer';
+import InfoIcon from '@mui/icons-material/Info';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DialogDeletePayment from './popups/DialogDeletePayment';
+import DialogNewQuota from './popups/DialogNewQuota';
+import DialogEditQuota from './popups/DialogEditQuota';
+import DialogDeleteQuota from './popups/DialogDeleteQuota';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Grid } from '@mui/material';
 import { API_DATA_CALL } from '../utils/api.js';
@@ -31,13 +37,21 @@ const theme = createTheme({
 
 export default function Payments() {
   const [newModal, setNewModal] = React.useState(false);
-  const [deleteModal, setDeleteModal] = React.useState(false);
+  const [deleteModalP, setDeleteModalP] = React.useState(false);
+  const [deleteModalQ, setDeleteModalQ] = React.useState(false);
   const [editModal, setEditModal] = React.useState(false);
   const [payments, setPayments] = React.useState([]);
+  const [quotas, setQuotas] = React.useState([]);
   const [rowSelected, setRowSelected] = React.useState('');
+  const [rowSelectedQ, setRowSelectedQ] = React.useState('');
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [anchorElP, setAnchorElP] = React.useState(null);
+  const [anchorElQ, setAnchorElQ] = React.useState(null);
+  const openP = Boolean(anchorElP);
+  const openQ = Boolean(anchorElQ);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -48,22 +62,24 @@ export default function Payments() {
     setPage(0);
   };
 
-  const handleOpen = () => {
+  const handleOpenNew = (e) => {
     setNewModal(true);
   }
 
-  const handleClose = () => {
+  const handleCloseNew = () => {
     setNewModal(false);
   }
 
-  const handleOpenDelete = (row, event) => {
+  const handleOpenDeleteP = (row, event) => {
     event.preventDefault();
-    setDeleteModal(true);
+    setDeleteModalP(true);
     setRowSelected(row.pk);
   }
 
-  const handleCloseDelete = () => {
-    setDeleteModal(false);
+  const handleOpenDeleteQ = (row, event) => {
+    event.preventDefault();
+    setDeleteModalQ(true);
+    setRowSelectedQ(row.id);
   }
 
   const handleOpenEdit = (row, event) => {
@@ -76,11 +92,22 @@ export default function Payments() {
       method: row.method,
       quota: row.quota,
     });
-    setRowSelected(data);
+    setRowSelectedQ(data);
   }
 
   const handleCloseEdit = () => {
     setEditModal(false);
+  }
+
+  const handleViewQuotas = async (row) => {
+    const data = await API_DATA_CALL(
+      'POST',
+      `/quota/list_by_payment/`,
+      {
+        'payment': row.pk
+      }
+    );
+    setQuotas(data);
   }
 
   React.useEffect(async () => {
@@ -101,75 +128,191 @@ export default function Payments() {
           </Typography>
         </Grid>
         <Grid item xs sx={{ textAlign: "right" }}>
-          <Button variant='contained'
-            size='small'
-            onClick={handleOpen}
-            startIcon={<AddCircleIcon />} >
-            New
-          </Button>
+          <Typography variant="h3" color="primary">
+              Quotas
+            </Typography>
         </Grid>
       </Grid>
-      <Paper sx={{ mt: 3 }}>
-        <TableContainer>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell><b>Transaction</b></TableCell>
-                <TableCell><b>Amount</b></TableCell>
-                <TableCell><b>Method</b></TableCell>
-                <TableCell><b>Quotas</b></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {payments
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                <TableRow key={row.pk}>
-                  <TableCell>{row.transaction}</TableCell>
-                  <TableCell>{row.amount}</TableCell>
-                  <TableCell>{row.method}</TableCell>
-                  <TableCell>{row.quotas}</TableCell>
-                  <TableCell align="right">
-                    <Button variant='outlined'
-                      size='small' sx={{ mr: 2 }}
-                      startIcon={<EditIcon />}
-                      onClick={(e) => handleOpenEdit(row, e)}>
-                      Edit
-                    </Button>
-                    <Button variant='contained'
-                      size='small'
-                      startIcon={<DeleteIcon />}
-                      onClick={(e) => handleOpenDelete(row, e)}>
-                      Delete
-                    </Button>
-                  </TableCell>
-                  <DialogEditCustomer 
-                    open={editModal}
-                    onClose={handleCloseEdit}
-                    row={rowSelected}
-                  />
-                  <DialogDeleteCustomer 
-                    open={deleteModal}
-                    onClose={handleCloseDelete}
-                    row={rowSelected}
-                  />
-                </TableRow>
-              ))}
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 25, 100]}
-                  count={payments.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-      <DialogNewCustomer open={newModal} onClose={handleClose}/>
+      <Grid container>
+        <Grid item md={5}>
+          <Paper sx={{ mt: 3 }}>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell><b>Transaction</b></TableCell>
+                    <TableCell><b>Amount</b></TableCell>
+                    <TableCell><b>Method</b></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {payments
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((rowP) => (
+                    <TableRow key={rowP.pk}>
+                      <TableCell>{rowP.transaction}</TableCell>
+                      <TableCell>{rowP.amount}</TableCell>
+                      <TableCell>{rowP.method}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          aria-label="more"
+                          id="buttonPayment"
+                          aria-controls={openP ? 'long-menu' : undefined}
+                          aria-expanded={openP ? 'true' : undefined}
+                          aria-haspopup="true"
+                          onClick={(e) => setAnchorElP(e.currentTarget) }
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="menuPayment"
+                          MenuListProps={{
+                            'aria-labelledby': 'long-button',
+                          }}
+                          anchorEl={anchorElP}
+                          open={openP}
+                          onClose={() => setAnchorElP(null)}
+                        >
+                          <MenuItem onClick={() => setAnchorElP(null)}>
+                            <Button variant='text'
+                              size='small' sx={{ mr: 2 }}
+                              startIcon={<InfoIcon />}
+                              onClick={() => handleViewQuotas(rowP)}>
+                              View Quotas
+                            </Button>
+                          </MenuItem>
+                          <MenuItem onClick={() => setAnchorElP(null)}>
+                            <Button variant='text'
+                              size='small'
+                              startIcon={<DeleteIcon />}
+                              onClick={(e) => handleOpenDeleteP(rowP, e)}>
+                              Delete
+                            </Button>
+                          </MenuItem>
+                        </Menu>
+                      </TableCell>
+                      <DialogDeletePayment
+                        open={deleteModalP}
+                        onClose={() => setDeleteModalP(false)}
+                        row={rowSelected}
+                      />
+                    </TableRow>
+                  ))}
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 25, 100]}
+                      count={payments.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+        <Grid item md={0.5}></Grid>
+        <Grid item md={6}>
+          <Paper sx={{ mt: 3 }}>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell><b>Quota number</b></TableCell>
+                    <TableCell><b>Total quotas</b></TableCell>
+                    <TableCell><b>Value</b></TableCell>
+                    <TableCell><b>Date</b></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {quotas
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((rowQ) => (
+                    <TableRow key={rowQ.id}>
+                      <TableCell>{rowQ.current_quota}</TableCell>
+                      <TableCell>{rowQ.total_quota}</TableCell>
+                      <TableCell>{rowQ.value}</TableCell>
+                      <TableCell>{rowQ.date}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          aria-label="more"
+                          id="buttonQuota"
+                          aria-controls={openQ ? 'long-menu' : undefined}
+                          aria-expanded={openQ ? 'true' : undefined}
+                          aria-haspopup="true"
+                          onClick={(e) => setAnchorElQ(e.currentTarget)}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="menuQuota"
+                          MenuListProps={{
+                            'aria-labelledby': 'long-button',
+                          }}
+                          anchorEl={anchorElQ}
+                          open={openQ}
+                          onClose={() => setAnchorElQ(null)}
+                        >
+                          <MenuItem onClick={() => setAnchorElQ(null)}>
+                            <Button variant='text'
+                              size='small' sx={{ mr: 2 }}
+                              startIcon={<AddCircleIcon />}
+                              onClick={(e) => handleOpenNew(e)}>
+                              New
+                            </Button>
+                          </MenuItem>
+                          <MenuItem onClick={() => setAnchorElQ(null)}>
+                            <Button variant='text'
+                              size='small' sx={{ mr: 2 }}
+                              startIcon={<EditIcon />}
+                              onClick={(e) => handleOpenEdit(rowQ, e)}>
+                              Edit
+                            </Button>
+                          </MenuItem>
+                          <MenuItem onClick={() => setAnchorElQ(null)}>
+                            <Button variant='text'
+                              size='small'
+                              startIcon={<DeleteIcon />}
+                              onClick={(e) => handleOpenDeleteQ(rowQ, e)}>
+                              Delete
+                            </Button>
+                          </MenuItem>
+                        </Menu>
+                      </TableCell>
+                      <DialogNewQuota
+                        open={newModal}
+                        onClose={handleCloseNew}
+                      />
+                      <DialogEditQuota
+                        open={editModal}
+                        onClose={handleCloseEdit}
+                        row={rowSelectedQ}
+                      />
+                      <DialogDeleteQuota
+                        open={deleteModalQ}
+                        onClose={() => setDeleteModalQ(false)}
+                        row={rowSelectedQ}
+                      />
+                    </TableRow>
+                  ))}
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 25, 100]}
+                      count={payments.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+      </Grid>
     </ThemeProvider>
   );
 }

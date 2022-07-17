@@ -14,14 +14,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-export default function DialogDeleteCustomer(props) {
+export default function DialogDeletePayment(props) {
   const navigate = useNavigate();
 
   const handleSubmit = async (event, pk) => {
     event.preventDefault();
     const response = await API_DATA_CALL(
       'DELETE',
-      `/customer/${pk}/`,
+      `/payment/${pk}/`,
       {
         'id': `${pk}`,
       }
@@ -39,7 +39,7 @@ export default function DialogDeleteCustomer(props) {
       TransitionComponent={Transition}
     >
       <Box component="form" noValidate onSubmit={(e) => handleSubmit(e, props.row)}>
-        <DialogTitle>Are you sure to delete this Customer?</DialogTitle>
+        <DialogTitle>Are you sure to delete this Payment?</DialogTitle>
         <DialogActions>
           <Button type="submit" variant="contained">Delete</Button>
         </DialogActions>

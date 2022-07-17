@@ -87,7 +87,11 @@ export default function Orders() {
       );
       data.map((o) => {
         const payment = pays.find(p => p.order == o.pk);
-        o['payment'] = payment.transaction;
+        if (payment){
+          o['payment'] = payment.transaction;
+        } else {
+          o['payment'] = null;
+        }
       });
     };
     setOrders(data);

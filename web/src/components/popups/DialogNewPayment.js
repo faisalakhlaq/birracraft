@@ -50,7 +50,7 @@ export default function DialogNewPayment(props) {
           'payment': responseP.pk,
         }
       );
-      if (responseQ.pk){ window.location.reload();
+      if (responseQ.pk){ navigate('/Payments');
       } else { navigate('/RegistrationFail'); }
     } else { navigate('/RegistrationFail'); }
   };
