@@ -29,9 +29,11 @@ export default function DialogEditQuota(props) {
       'PATCH',
       `/quota/${pk}/`,
       {
-        'name': data.get('name'),
-        'description': data.get('description'),
-        'price_per_lt': data.get('price_per_lt'),
+        'current_quota': data.get('current_quota'),
+        'total_quota': data.get('total_quota'),
+        'value': data.get('value'),
+        'date': data.get('date'),
+        'payment': data.get('payment_id'),
       }
     ).then(response => {
       if (response.pk){
@@ -68,6 +70,11 @@ export default function DialogEditQuota(props) {
               name="pk" 
               sx={{ display: "none" }}
             />
+            <TextField value={data.payment_id}
+              id="payment_id"
+              name="payment_id"
+              sx={{ display: "none" }}
+            />
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
                 id="current_quota"
@@ -81,7 +88,7 @@ export default function DialogEditQuota(props) {
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
                 id="total_quota"
-                name="v"
+                name="total_quota"
                 label={data.total_quota}
                 type="number"
                 helperText="Total Quotas"

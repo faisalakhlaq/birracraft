@@ -86,11 +86,12 @@ export default function Payments() {
     event.preventDefault();
     setEditModal(true);
     const data = JSON.stringify({
-      pk: row.pk,
-      transaction: row.transaction,
-      amount: row.amount,
-      method: row.method,
-      quota: row.quota,
+      pk: row.id,
+      current_quota: row.current_quota,
+      total_quota: row.total_quota,
+      value: row.value,
+      date: row.date,
+      payment_id: row.payment_id,
     });
     setRowSelectedQ(data);
   }
