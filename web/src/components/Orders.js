@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
@@ -12,14 +11,12 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import SettingsIcon from '@mui/icons-material/Settings';
 import DialogNewOrder from './popups/DialogNewOrder';
 import DialogDeleteOrder from './popups/DialogDeleteOrder';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { API_DATA_CALL } from '../utils/api.js';
-import { useNavigate } from 'react-router-dom';
+import DialogNewPayment from './popups/DialogNewPayment';
 
 
 const theme = createTheme({
@@ -34,7 +31,7 @@ const theme = createTheme({
 export default function Orders() {
   const [newModal, setNewModal] = React.useState(false);
   const [deleteModal, setDeleteModal] = React.useState(false);
-  const [editModal, setEditModal] = React.useState(false);
+  const [paymentModal, setPaymentModal] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
   const [rowSelected, setRowSelected] = React.useState('');
 
@@ -58,6 +55,16 @@ export default function Orders() {
     setNewModal(false);
   }
 
+  const handleOpenPayment = (row, event) => {
+    event.preventDefault();
+    setPaymentModal(true);
+    setRowSelected(row.pk);
+  }
+
+  const handleClosePayment = () => {
+    setPaymentModal(false);
+  }
+
   const handleOpenDelete = (row, event) => {
     event.preventDefault();
     setDeleteModal(true);
@@ -68,37 +75,27 @@ export default function Orders() {
     setDeleteModal(false);
   }
 
-  const handleOpenEdit = (row, event) => {
-    event.preventDefault();
-    setEditModal(true);
-    const data = JSON.stringify({
-      pk: row.pk,
-      data: row.data,
-      products: row.products,
-      price: row.price,
-      delivery_cost: row.delivery_cost,
-      total_amount: row.total_amount,
-      customer: row.customer,
-      payment: row.payment,
-      state: row.state,
-      comment: row.comment,
-    });
-    setRowSelected(data);
-  }
-
-  const handleCloseEdit = () => {
-    setEditModal(false);
-  }
-
   React.useEffect(async () => {
     const data = await API_DATA_CALL(
-    'GET',
-    `/order/`
+      'GET',
+      `/order/`
     );
+    if (data){
+      const pays = await API_DATA_CALL(
+        'GET',
+        `/payment/`
+      );
+      data.map((o) => {
+        const payment = pays.find(p => p.order == o.pk);
+        if (payment){
+          o['payment'] = payment.transaction;
+        } else {
+          o['payment'] = null;
+        }
+      });
+    };
     setOrders(data);
   }, []);
-
-  const navigate = useNavigate();
 
 
   return (
@@ -128,7 +125,7 @@ export default function Orders() {
                 <TableCell><b>Delivery cost</b></TableCell>
                 <TableCell><b>Total amount</b></TableCell>
                 <TableCell><b>Customer</b></TableCell>
-                <TableCell><b>Payment</b></TableCell>
+                <TableCell><b>Payment transaction</b></TableCell>
                 <TableCell><b>State</b></TableCell>
                 <TableCell><b>Comment</b></TableCell>
               </TableRow>
@@ -151,6 +148,14 @@ export default function Orders() {
                   <TableCell>{row.state}</TableCell>
                   <TableCell>{row.comment}</TableCell>
                   <TableCell align="right">
+                    <Button variant='outlined'
+                      size='small'
+                      startIcon={<AddCircleIcon />}
+                      onClick={(e) => handleOpenPayment(row, e)}>
+                      Payment
+                    </Button>
+                  </TableCell>
+                  <TableCell align="right">
                     <Button variant='contained'
                       size='small'
                       startIcon={<DeleteIcon />}
@@ -158,6 +163,11 @@ export default function Orders() {
                       Delete
                     </Button>
                   </TableCell>
+                  <DialogNewPayment
+                    open={paymentModal}
+                    onClose={handleClosePayment}
+                    row={rowSelected}
+                  />
                   <DialogDeleteOrder
                     open={deleteModal}
                     onClose={handleCloseDelete}

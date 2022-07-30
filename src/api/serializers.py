@@ -70,20 +70,7 @@ class ProductSerializer(serializers.ModelSerializer):
                 'arrived_date', 'price', 'state')
 
 
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = ('pk', 'transaction', 'amount', 'method', 'quotas')
-
-
-class QuotaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Quota
-        fields = ('pk', 'current_quota', 'total_quota', 'value', 'date')
-
-
 class OrderSerializer(serializers.ModelSerializer):
-    payment = serializers.IntegerField(required=False)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -99,7 +86,24 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('pk', 'date', 'products', 'price', 'delivery_cost',
-                'total_amount', 'customer', 'payment', 'state', 'comment')
+                'total_amount', 'customer', 'state', 'comment')
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ('pk', 'transaction', 'amount', 'method', 'order')
+
+
+class QuotaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quota
+        fields = ('pk', 'current_quota', 'total_quota',
+                'value', 'date', 'payment')
+
+
+class QuotasByPaymentSerializer(serializers.Serializer):
+    payment = serializers.IntegerField()
 
 
 class ReportSerializer(serializers.Serializer):

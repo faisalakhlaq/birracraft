@@ -49,7 +49,7 @@ export default function DialogNewProduct(props) {
           'container': data.get('container'),
           'flavour': data.get('flavour'),
           'arrived_date': data.get('arrived_date'),
-          'price': (container.liters * flavour.price_per_lt),
+          'price': (container.liters * flavour.price_per_lt).toFixed(2),
           'state': data.get('state'),
         }
       ).then(response => {

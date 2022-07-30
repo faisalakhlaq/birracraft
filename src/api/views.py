@@ -1,3 +1,4 @@
+from cmath import e
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_decode
@@ -153,6 +154,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response({'status': response.status_code})
 
 
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = serializers.OrderSerializer
+
+
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = serializers.PaymentSerializer
@@ -160,13 +166,21 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
 class QuotaViewSet(viewsets.ModelViewSet):
     queryset = Quota.objects.all()
-    serializer_class = serializers.QuotaSerializer
 
+    def get_serializer_class(self):
+        if self.action == 'list_by_payment':
+            return serializers.QuotasByPaymentSerializer
+        else:
+            return serializers.QuotaSerializer
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = serializers.OrderSerializer
-
+    @action(methods=('post', ), detail=False, )
+    def list_by_payment(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        qs = list(Quota.objects.filter(
+                payment=serializer.validated_data['payment']
+            ).values())
+        return Response(qs)
 
 class ReportViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.ReportSerializer

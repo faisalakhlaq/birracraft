@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DialogNewFlavour(props) {
+export default function DialogNewQuota(props) {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -25,11 +25,13 @@ export default function DialogNewFlavour(props) {
     const data = new FormData(event.currentTarget);
     return await API_DATA_CALL(
       'POST',
-      '/flavour/',
+      '/quota/',
       {
-        'name': data.get('name'),
-        'description': data.get('description'),
-        'price_per_lt': data.get('price_per_lt'),
+        'current_quota': data.get('current_quota'),
+        'total_quota': data.get('total_quota'),
+        'value': data.get('value'),
+        'date': data.get('date'),
+        'payment': data.get('payment'),
       }
     ).then(response => {
       if (response.pk){
@@ -47,39 +49,49 @@ export default function DialogNewFlavour(props) {
       TransitionComponent={Transition}
     >
       <Box component="form" noValidate onSubmit={handleSubmit}>
-        <DialogTitle>Create New Flavour</DialogTitle>
+        <DialogTitle>Create New Quota</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add a new flavour to assign to a product.
+            Add a new quota to assign to a product.
           </DialogContentText>
           <Grid container>
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
-                id="name"
-                name="name"
-                label="Name"
-                type="text"
+                id="current_quota"
+                name="current_quota"
+                label="Current Quota"
+                type="number"
                 variant="standard"
               />
             </Grid>
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
-                id="price_per_lt"
-                name="price_per_lt"
-                label="Price per liter"
-                type="decimal"
+                id="total_quota"
+                name="total_quota"
+                label="Total quotas"
+                type="number"
                 variant="standard"
               />
             </Grid>
           </Grid>
-          <Grid container justifyContent="center">
+          <Grid container>
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
-                id="description"
-                name="description"
-                label="Description"
-                type="text"
+                id="value"
+                name="value"
+                label="Value"
+                type="decimal"
                 variant="standard"
+              />
+            </Grid>
+            <Grid item sx={{ ml: 5 }}>
+              <TextField margin="dense"
+                id="date"
+                name="date"
+                label="Date"
+                type="date"
+                variant="standard"
+                InputLabelProps={{ shrink: true }}
               />
             </Grid>
           </Grid>

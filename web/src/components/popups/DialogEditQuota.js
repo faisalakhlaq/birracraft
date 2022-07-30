@@ -17,19 +17,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DialogNewFlavour(props) {
+
+export default function DialogEditQuota(props) {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const pk = data.get('pk');
     return await API_DATA_CALL(
-      'POST',
-      '/flavour/',
+      'PATCH',
+      `/quota/${pk}/`,
       {
-        'name': data.get('name'),
-        'description': data.get('description'),
-        'price_per_lt': data.get('price_per_lt'),
+        'current_quota': data.get('current_quota'),
+        'total_quota': data.get('total_quota'),
+        'value': data.get('value'),
+        'date': data.get('date'),
+        'payment': data.get('payment_id'),
       }
     ).then(response => {
       if (response.pk){
@@ -40,6 +44,14 @@ export default function DialogNewFlavour(props) {
     });
   };
 
+  const data = props.row ? JSON.parse(props.row) : {
+    'pk': '',
+    'current_quota': '',
+    'total_quota': '',
+    'value': '',
+    'date': '',
+  };
+
 
   return (
     <Dialog open={props.open}
@@ -47,38 +59,61 @@ export default function DialogNewFlavour(props) {
       TransitionComponent={Transition}
     >
       <Box component="form" noValidate onSubmit={handleSubmit}>
-        <DialogTitle>Create New Flavour</DialogTitle>
+        <DialogTitle>Modify selected Quota info</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Add a new flavour to assign to a product.
+            Edit quota data.
           </DialogContentText>
           <Grid container>
+            <TextField value={data.pk}
+              id="pk"
+              name="pk" 
+              sx={{ display: "none" }}
+            />
+            <TextField value={data.payment_id}
+              id="payment_id"
+              name="payment_id"
+              sx={{ display: "none" }}
+            />
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
-                id="name"
-                name="name"
-                label="Name"
-                type="text"
+                id="current_quota"
+                name="current_quota"
+                label={data.current_quota}
+                type="number"
+                helperText="Current Quota"
                 variant="standard"
               />
             </Grid>
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
-                id="price_per_lt"
-                name="price_per_lt"
-                label="Price per liter"
-                type="decimal"
+                id="total_quota"
+                name="total_quota"
+                label={data.total_quota}
+                type="number"
+                helperText="Total Quotas"
                 variant="standard"
               />
             </Grid>
           </Grid>
-          <Grid container justifyContent="center">
+          <Grid container>
             <Grid item sx={{ ml: 5 }}>
               <TextField margin="dense"
-                id="description"
-                name="description"
-                label="Description"
-                type="text"
+                id="value"
+                name="value"
+                label={data.value}
+                type="number"
+                helperText="Value"
+                variant="standard"
+              />
+            </Grid>
+            <Grid item sx={{ ml: 5 }}>
+              <TextField margin="dense"
+                id="date"
+                name="date"
+                label={data.date}
+                type="date"
+                helperText="Date"
                 variant="standard"
               />
             </Grid>

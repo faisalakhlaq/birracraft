@@ -21,11 +21,11 @@ import { API_DATA_CALL } from '../utils/api.js';
 
 
 const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#264118',
-        },
-    },
+  palette: {
+    primary: {
+      main: '#264118',
+      },
+  },
 });
 
 

@@ -14,23 +14,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-export default function DialogDeleteCustomer(props) {
+export default function DialogDeleteQuota(props) {
   const navigate = useNavigate();
 
   const handleSubmit = async (event, pk) => {
     event.preventDefault();
     const response = await API_DATA_CALL(
       'DELETE',
-      `/customer/${pk}/`,
+      `/quota/${pk}/`,
       {
         'id': `${pk}`,
       }
-    );
+    ).then(response => {
     if (response.status === 204){
       window.location.reload();
     } else {
       navigate('/RegistrationFail');
-    };
+    };});
   };
 
   return (
@@ -39,7 +39,7 @@ export default function DialogDeleteCustomer(props) {
       TransitionComponent={Transition}
     >
       <Box component="form" noValidate onSubmit={(e) => handleSubmit(e, props.row)}>
-        <DialogTitle>Are you sure to delete this Customer?</DialogTitle>
+        <DialogTitle>Are you sure to delete this Quota?</DialogTitle>
         <DialogActions>
           <Button type="submit" variant="contained">Delete</Button>
         </DialogActions>
